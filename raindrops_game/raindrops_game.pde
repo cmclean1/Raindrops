@@ -1,17 +1,32 @@
-Raindrop r;
+Raindrop[] r;
 Catcher c;
+int wut = 0;
+int time;
 void setup()
 {
-  // frameRate(5);
   size(500, 500);
-  r = new Raindrop();
+  r = new Raindrop[50];
+
   c = new Catcher();
 }
 void draw()
 {
   background(0);
-  r.display();
-  r.move();
+  r[wut] = new Raindrop();
+  for (int i = 0; i < wut; i++)
+  {
+    r[i].display();
+    r[i].move();
+  }
+  if (millis() >= time)
+  {
+    wut++;
+    if(wut >= 50)
+    {
+      wut = 0;
+    }
+    time+=2000;
+  }
   c.move();
   c.display();
 }

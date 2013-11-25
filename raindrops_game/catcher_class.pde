@@ -16,7 +16,18 @@ class Catcher
   }
   void move()
   {
-    acc.set(((width/2)-mouseX)/300, 0);
+    if (keyPressed && keyCode == LEFT)
+    {
+      acc.set(-0.1, 0);
+    }
+    else if (keyPressed && keyCode == RIGHT)
+    {
+      acc.set(0.1, 0);
+    }
+    else
+    {
+      acc.set(0,0);
+    }
     vel.add(acc);
     loc.add(vel);
   }

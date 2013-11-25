@@ -7,8 +7,8 @@ class Raindrop
   Raindrop()
   {
     loc = new PVector(random(width), 0);
-    vel = new PVector(0, 1);
-    acc = new PVector(0, .1);
+    vel = new PVector(0, 0);
+    acc = new PVector(0, .01);
     d = 10;
   }
   void display()
