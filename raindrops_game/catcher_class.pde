@@ -3,16 +3,18 @@ class Catcher
   PVector loc;
   PVector vel;
   PVector acc;
+  int d;
   Catcher()
   {
     loc = new PVector(width/2, 400);
     acc = new PVector(0, 0);
     vel = new PVector(0, 0);
+    d = 20;
   }
   void display()
   {
     fill(255);
-    ellipse(loc.x, loc.y, 20, 20);
+    ellipse(loc.x, loc.y, d, d);
   }
   void move()
   {
@@ -26,7 +28,20 @@ class Catcher
     }
     else
     {
-      acc.set(0,0);
+      acc.set(0, 0);
+    }
+    if (loc.x >= width-(d/2) || loc.x <= d/2 )
+    {
+      vel.x = 0;
+      acc.x = 0;
+      if (loc.x >= width-(d/2))
+      {
+        loc.x --;
+      }
+      else
+      {
+        loc.x++;
+      }
     }
     vel.add(acc);
     loc.add(vel);

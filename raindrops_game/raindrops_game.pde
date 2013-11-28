@@ -1,33 +1,34 @@
 Raindrop[] r;
+
 Catcher c;
 int wut = 0;
-int time;
+int time = 2000;
+int score;
+int Time = 2000;
 void setup()
 {
   size(500, 500);
-  r = new Raindrop[50];
-
+  r = new Raindrop[1];
   c = new Catcher();
+  r[0] = new Raindrop();
 }
 void draw()
 {
   background(0);
-  r[wut] = new Raindrop();
-  for (int i = 0; i < wut; i++)
+  for (int i = 0; i < r.length; i++)
   {
     r[i].display();
     r[i].move();
+    r[i].checkCatcher(c);
   }
   if (millis() >= time)
   {
-    wut++;
-    if(wut >= 50)
-    {
-      wut = 0;
-    }
-    time+=2000;
+    r = (Raindrop[]) append(r, new Raindrop());  
+    time+=Time;
   }
   c.move();
   c.display();
+  fill(255);
+  text("Score: " + score, 450, 50);
 }
 
