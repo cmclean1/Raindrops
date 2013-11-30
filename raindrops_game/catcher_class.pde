@@ -4,10 +4,14 @@ class Catcher
   PVector vel;
   PVector acc;
   int d;
+  float initialX;
+  int nextRain = 0;
+  boolean iCaughtIt = false;
   Catcher()
   {
     loc = new PVector(width/2, 400);
     acc = new PVector(0, 0);
+    initialX = loc.x;
     vel = new PVector(0, 0);
     d = 20;
   }
@@ -15,6 +19,26 @@ class Catcher
   {
     fill(255);
     ellipse(loc.x, loc.y, d, d);
+  }
+  void autoMove(Raindrop[] wut)
+  {
+    acc.set(0, 0);
+    nextRain = 0;
+    while (wut[nextRain].caught == true)
+    {
+      nextRain++;
+      if (nextRain >= wut.length)
+      {
+        return;
+      }
+    }
+    if (iCaughtIt == true)
+    {
+      wut[nextRain].checkheight();
+    }
+    iCaughtIt = false;
+    vel.set((wut[nextRain].loc.x-initialX)/wut[nextRain].distance, 0);
+    loc.add(vel);
   }
   void move()
   {

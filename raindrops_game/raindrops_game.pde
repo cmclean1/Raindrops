@@ -23,12 +23,13 @@ void draw()
   }
   if (millis() >= time)
   {
-    r = (Raindrop[]) append(r, new Raindrop());  
+    r = (Raindrop[]) append(r, new Raindrop());
     time+=Time;
   }
-  c.move();
+  //c.move();
   c.display();
+  c.autoMove(r);
   fill(255);
-  text("Score: " + score, 450, 50);
+  text("Score: " + score, 420, 50);
 }
 
