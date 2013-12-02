@@ -5,6 +5,7 @@ class Raindrop
   PVector acc;
   int d;
   boolean caught = false;
+  boolean miss = false;
   float changeV;
   float distance;
   float dropheight;
@@ -13,7 +14,7 @@ class Raindrop
   Raindrop()
   {
     dropheight = 400;
-    changeV = .5;
+    changeV = .1;
     initialV = 0;
     loc = new PVector(random(width), d/2);
     vel = new PVector(0, 0);
@@ -32,7 +33,7 @@ class Raindrop
   }
   void move()
   {
-    if (!caught)
+    if (!caught && !miss)
     {
       acc.set(0, changeV);
       vel.add(acc);
@@ -51,9 +52,14 @@ class Raindrop
     {
       caught = true;
       score++;
-      Time-=200;
+      Time-=0;//200;
       catcher.initialX = catcher.loc.x;
       catcher.iCaughtIt= true;
+    }
+    if (loc.y >= height)
+    {
+      lives++;
+      miss = true;
     }
   }
   void checkheight()
@@ -61,7 +67,6 @@ class Raindrop
     initialV = vel.y;
     dropheight = dist(0, loc.y, 0, 400);
     distance = (finalV-initialV)/acc.y;
-    println(distance);
   }
 }
 
