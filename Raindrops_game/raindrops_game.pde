@@ -34,6 +34,8 @@ boolean logo = false;
 int introTime;
 int whichIntro = 0;
 int location = 0;
+int timeLeft;
+int startTime;
 PFont  font = createFont("Gabriola-48.vlw", 10);
 String[] introString = {
   "You are the fate of the world", "You don't remember much", "but only one word rings through your head:"
@@ -58,7 +60,7 @@ void setup()
   gameRain[0] = new Raindrop();
   menulight = new Lightning(500);
   storyMode = new Button(width/2+30, "Story Mode", 0);
-  timeAttack = new Button(width/2+60, "Time Attack", 0);
+  timeAttack = new Button(width/2+60, "Time Attack", 2);
   survival = new Button(width/2+90, "Survival", 1);
   credits = new Button(width/2+120, "Credits", 4, false);
   back = new Button(width/2+50, "Back", 0, false);
@@ -175,6 +177,10 @@ void draw()
     {
       surviveMode();
     }
+    if(location == 2)
+    {
+      timeMode();
+    }
   }
 }
 void stop()
@@ -192,6 +198,33 @@ void gameOver()
   textSize(20);
   text("Press ENTER to return to menu \nPress H to view high scores", width/2, height/2+50);
   noLoop();
+}
+void timeMode()
+{
+  textAlign(LEFT);
+  textSize(15);
+  text("Score: " + score, 420, 50);
+  text("Time: " + timeLeft, 50, 50);
+  if (location == 2)
+  {
+    for (int i = 0; i < gameRain.length; i++)
+    {
+      gameRain[i].display();
+      gameRain[i].move();
+      gameRain[i].checkCatcher(gameCatch);
+    }
+    if (millis() >= time)
+    {
+      gameRain = (Raindrop[]) append(gameRain, new Raindrop());
+      time+=Time;
+    }
+    gameCatch.display();
+    gameCatch.move();
+    if (timeLeft <= 0)
+    {
+      gameOver();
+    }
+  }
 }
 void surviveMode()
 {
@@ -243,6 +276,7 @@ void mouseClicked()
   credits.ifClicked();
   back.ifClicked();
   survival.ifClicked();
+  timeAttack.ifClicked();
 }
 boolean declareTime = true;
 int timePassed;
