@@ -20,15 +20,17 @@ Button storyMode, timeAttack, survival, credits, back;
 Catcher c;
 Catcher gameCatch;
 Lightning menulight;
+String[] loadData;
+String[] survivalNames = new String[5];
+int[] survivalScores = new int[5];
 int wut = 0;
 int time = 2000;
 int score;
 int lives;
-int maxLives = 2;
+int maxLives = 10;
 int Time = 2000;
 boolean Intro = false;
 boolean logo = false;
-boolean ifreset = true;
 int introTime;
 int whichIntro = 0;
 int location = 0;
@@ -39,18 +41,27 @@ String[] introString = {
 void setup()
 {
   size(500, 500);
+  loadData = loadStrings("survival.txt");
+  for (int i = 0; i <= 8; i+=2)
+  {
+    survivalNames[i/2]=loadData[i];
+  }
+  for (int i = 0; i <= 8; i+=2)
+  {
+    survivalScores[i/2]=int(loadData[i]);
+  }
   r = new Raindrop[1];
   c = new Catcher();
+  r[0] = new Raindrop();
   gameRain = new Raindrop[1];
   gameCatch = new Catcher();
   gameRain[0] = new Raindrop();
-  r[0] = new Raindrop();
   menulight = new Lightning(500);
   storyMode = new Button(width/2+30, "Story Mode", 0);
   timeAttack = new Button(width/2+60, "Time Attack", 0);
   survival = new Button(width/2+90, "Survival", 1);
   credits = new Button(width/2+120, "Credits", 4, false);
-  back = new Button(width/2+50, "Back", 0);
+  back = new Button(width/2+50, "Back", 0, false);
   minim = new Minim(this);
   rainminim = new Minim(this);
   gunminim = new Minim(this);
@@ -105,6 +116,7 @@ void intro()
     player.loop();
   }
 }
+
 void draw()
 {
   fill(0, 50);
@@ -161,26 +173,25 @@ void draw()
     }
     if (location == 1)
     {
-      reset();
       surviveMode();
     }
   }
 }
-void reset()
+void stop()
 {
-  if (ifreset)
-  {
-    score = 0;
-  }
-  ifreset = false;
+  player.close();
+  minim.stop();
+  super.stop();
 }
 void gameOver()
 {
   fill(255, 0, 0);
   textAlign(CENTER);
   textSize(50);
-  noLoop();
   text("GAME OVER", width/2, height/2);
+  textSize(20);
+  text("Press ENTER to return to menu \nPress H to view high scores", width/2, height/2+50);
+  noLoop();
 }
 void surviveMode()
 {
@@ -209,10 +220,47 @@ void surviveMode()
     }
   }
 }
+void keyPressed()
+{
+  if (keyCode == ENTER)
+  {
+    if (location == 1 && lives >= maxLives)
+    {
+      loop();
+      location = 0;
+      r = new Raindrop[1];
+      c = new Catcher();
+      r[0] = new Raindrop();
+      time = millis() + Time;
+      player.close();
+      player = minim.loadFile("Water.wav");
+      player.play();
+    }
+  }
+}
 void mouseClicked()
 {
   credits.ifClicked();
   back.ifClicked();
   survival.ifClicked();
+}
+boolean declareTime = true;
+int timePassed;
+boolean timePassed(int howMuchTime)
+{
+  if (declareTime == true)
+  {
+    timePassed = millis() + howMuchTime;
+    declareTime = false;
+  }
+  if (millis() >= timePassed)
+  {
+    declareTime = true;
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 

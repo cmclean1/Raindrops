@@ -12,7 +12,7 @@ class Button {
     recWidth = 85;
     mode = true;
   }
-    Button(int _y, String _message, int _changeLoc, boolean _mode)
+  Button(int _y, String _message, int _changeLoc, boolean _mode)
   {
     y = _y;
     message = _message;
@@ -28,7 +28,7 @@ class Button {
     stroke(0, 0, 255);
     rect(width/2, y-5, recWidth, 25);
     fill(0, 0, 255);
-    if(clicked())
+    if (clicked())
     {
       fill(255);
     }
@@ -40,6 +40,19 @@ class Button {
     if (clicked())
     {
       location = changeLoc;
+      if (mode)
+      {
+        score = 0;
+        gameCatch = new Catcher();
+        while (gameRain.length >= 1)
+        {
+          gameRain = (Raindrop[]) shorten(gameRain);
+        }
+        lives = 0;
+        player.close();
+        player = minim.loadFile("play.mp3");
+        player.play();
+      }
     }
   }
   boolean clicked()
