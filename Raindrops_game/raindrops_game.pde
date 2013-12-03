@@ -36,6 +36,7 @@ int whichIntro = 0;
 int location = 0;
 int timeLeft;
 int startTime;
+int totalTimeLeft;
 PFont  font = createFont("Gabriola-48.vlw", 10);
 String[] introString = {
   "You are the fate of the world", "You don't remember much", "but only one word rings through your head:"
@@ -63,7 +64,7 @@ void setup()
   timeAttack = new Button(width/2+60, "Time Attack", 2);
   survival = new Button(width/2+90, "Survival", 1);
   credits = new Button(width/2+120, "Credits", 4, false);
-  back = new Button(width/2+50, "Back", 0, false);
+  back = new Button(width/2, "Back", 0, false);
   minim = new Minim(this);
   rainminim = new Minim(this);
   gunminim = new Minim(this);
@@ -177,7 +178,7 @@ void draw()
     {
       surviveMode();
     }
-    if(location == 2)
+    if (location == 2)
     {
       timeMode();
     }
@@ -204,7 +205,7 @@ void timeMode()
   textAlign(LEFT);
   textSize(15);
   text("Score: " + score, 420, 50);
-  text("Time: " + timeLeft, 50, 50);
+  text("Time: " + int(timeLeft/1000+1), 50, 50);
   if (location == 2)
   {
     for (int i = 0; i < gameRain.length; i++)
@@ -220,6 +221,7 @@ void timeMode()
     }
     gameCatch.display();
     gameCatch.move();
+    timeLeft = totalTimeLeft-millis();
     if (timeLeft <= 0)
     {
       gameOver();
@@ -257,17 +259,20 @@ void keyPressed()
 {
   if (keyCode == ENTER)
   {
-    if (location == 1 && lives >= maxLives)
+    if (location == 1 || location == 2)
     {
-      loop();
-      location = 0;
-      r = new Raindrop[1];
-      c = new Catcher();
-      r[0] = new Raindrop();
-      time = millis() + Time;
-      player.close();
-      player = minim.loadFile("Water.wav");
-      player.play();
+      if (lives >= maxLives || timeLeft <= 0)
+      {
+        loop();
+        location = 0;
+        r = new Raindrop[1];
+        c = new Catcher();
+        r[0] = new Raindrop();
+        time = millis() + Time;
+        player.close();
+        player = minim.loadFile("Water.wav");
+        player.play();
+      }
     }
   }
 }

@@ -44,8 +44,9 @@ class Button {
       {
         score = 0;
         gameCatch = new Catcher();
-        timeLeft = 12000;
+        timeLeft = 120000;
         startTime = millis();
+        totalTimeLeft = millis() + timeLeft;
         while (gameRain.length >= 1)
         {
           gameRain = (Raindrop[]) shorten(gameRain);
