@@ -31,9 +31,6 @@ class Lightning
       {
         background(255);
       }
-      else
-      {
-      }
       lightPlayer.setGain(-15);
       lightPlayer.play();
     }

@@ -70,5 +70,18 @@ class Catcher
     vel.add(acc);
     loc.add(vel);
   }
+  boolean checkLightning(Lightning l)
+  {
+    if(l.show == true)
+    {
+      acc.set(0,0);
+      vel.set(0,0);
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
 }
 

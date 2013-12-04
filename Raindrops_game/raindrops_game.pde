@@ -20,6 +20,7 @@ Button storyMode, timeAttack, survival, credits, back;
 Catcher c;
 Catcher gameCatch;
 Lightning menulight;
+Lightning gameLight;
 String[] loadData;
 String[] survivalNames = new String[5];
 int[] survivalScores = new int[5];
@@ -29,14 +30,13 @@ int score;
 int lives;
 int maxLives = 10;
 int Time = 2000;
-boolean Intro = false;
-boolean logo = false;
 int introTime;
 int whichIntro = 0;
 int location = 0;
 int timeLeft;
 int startTime;
 int totalTimeLeft;
+boolean paused = false;
 PFont  font = createFont("Gabriola-48.vlw", 10);
 String[] introString = {
   "You are the fate of the world", "You don't remember much", "but only one word rings through your head:"
@@ -60,6 +60,7 @@ void setup()
   gameCatch = new Catcher();
   gameRain[0] = new Raindrop();
   menulight = new Lightning(500);
+  gameLight = new Lightning(1000);
   storyMode = new Button(width/2+30, "Story Mode", 0);
   timeAttack = new Button(width/2+60, "Time Attack", 2);
   survival = new Button(width/2+90, "Survival", 1);
@@ -84,7 +85,7 @@ void Logo()
   }
   else
   {
-    logo = false;
+    location = -1;    
     introTime = millis()+4000;
     rain.setGain(-15);
     rain.loop();
@@ -113,7 +114,7 @@ void intro()
   }
   if (whichIntro >3)
   {
-    Intro = false;
+    location = 0;    
     time = millis()+Time;
     player.setGain(0);
     player.loop();
@@ -126,62 +127,61 @@ void draw()
   noStroke();
   rectMode(CORNER);
   rect(0, 0, width, height);
-  if (logo)
+  if (location == -2)
   {
     Logo();
   }
-  if (Intro && !logo)
+  if (location == -1)
   {
     intro();
   }
-  if (!Intro)
+  if (location == 4 || location == 0)
   {
-    if (location == 4 || location == 0)
+    for (int i = 0; i < r.length; i++)
     {
-      for (int i = 0; i < r.length; i++)
-      {
-        r[i].display();
-        r[i].move();
-        r[i].checkCatcher(c);
-      }
-      if (millis() >= time)
-      {
-        r = (Raindrop[]) append(r, new Raindrop());
-        time+=Time;
-      }
-      //c.move();
-      c.display();
-      c.autoMove(r);
+      r[i].display();
+      r[i].move();
+      r[i].checkCatcher(c);
     }
-    fill(255);
-    if (location == 0)
+    if (millis() >= time)
     {
-      textSize(40);
-      fill(0, 0, 255);
-      textAlign(CENTER);
-      text("WATER", width/2, height/2);
-      storyMode.display();
-      timeAttack.display();
-      survival.display();
-      credits.display();
-      menulight.appear();
+      r = (Raindrop[]) append(r, new Raindrop());
+      time+=Time;
     }
-    if (location == 4)
-    {
-      back.display();
-      textSize(15);
-      fill(0, 0, 255);
-      textAlign(CORNER);
-      text("Coding: Clayton McLean \nMusic: Clayton Mclean \nSound Effects: The Internet \nArt: Clayton McLean \nDesign: Clayton McLean \nTesters: Clayton McLean \nProduced By: Clayton McLean \nSpecial Thanks to: Creators of Processing \nAnything and Everything else: Clayton McLean", 15, 25);
-    }
-    if (location == 1)
-    {
-      surviveMode();
-    }
-    if (location == 2)
-    {
-      timeMode();
-    }
+    //c.move();
+    c.display();
+    c.autoMove(r);
+  }
+  fill(255);
+  if (location == 0)
+  {
+    textSize(40);
+    fill(0, 0, 255);
+    textAlign(CENTER);
+    text("WATER", width/2, height/2);
+    storyMode.display();
+    timeAttack.display();
+    survival.display();
+    credits.display();
+    menulight.appear();
+  }
+  if (location == 4)
+  {
+    back.display();
+    textSize(15);
+    fill(0, 0, 255);
+    textAlign(CORNER);
+    text("Coding: Clayton McLean \nMusic: Clayton Mclean \nSound Effects: The Internet \nArt: Clayton McLean \nDesign: Clayton McLean \nTesters: Clayton McLean \nProduced By: Clayton McLean \nSpecial Thanks to: Creators of Processing \nAnything and Everything else: Clayton McLean", 15, 25);
+  }
+  if (location == 1)
+  {
+    gameLight.appear();
+    surviveMode();
+  }
+  if (location == 2)
+  {
+    gameLight.appear();
+    timeMode();
   }
 }
 void stop()
@@ -206,6 +206,12 @@ void timeMode()
   textSize(15);
   text("Score: " + score, 420, 50);
   text("Time: " + int(timeLeft/1000+1), 50, 50);
+  textSize(10);
+  fill(255, 0, 0);
+ // text("Press \"P\"  to pause", 10, 20);
+  textAlign(RIGHT);
+  text("Press \"R\"  to end early", 495, 20);
+
   if (location == 2)
   {
     for (int i = 0; i < gameRain.length; i++)
@@ -220,7 +226,10 @@ void timeMode()
       time+=Time;
     }
     gameCatch.display();
-    gameCatch.move();
+    if (gameCatch.checkLightning(gameLight) == false)
+    {
+      gameCatch.move();
+    }    
     timeLeft = totalTimeLeft-millis();
     if (timeLeft <= 0)
     {
@@ -234,6 +243,11 @@ void surviveMode()
   textSize(15);
   text("Score: " + score, 420, 50);
   text("Lives: " + (maxLives-lives), 50, 50);
+  textSize(10);
+  fill(255, 0, 0);
+ // text("Press \"P\"  to pause", 10, 20);
+  textAlign(RIGHT);
+  text("Press \"R\"  to end early", 495, 20);
   if (location == 1)
   {
     for (int i = 0; i < gameRain.length; i++)
@@ -248,7 +262,10 @@ void surviveMode()
       time+=Time;
     }
     gameCatch.display();
-    gameCatch.move();
+    if (gameCatch.checkLightning(gameLight) == false)
+    {
+      gameCatch.move();
+    }
     if (lives >= maxLives)
     {
       gameOver();
@@ -257,9 +274,9 @@ void surviveMode()
 }
 void keyPressed()
 {
-  if (keyCode == ENTER)
+  if (location == 1 || location == 2)
   {
-    if (location == 1 || location == 2)
+    if (keyCode == ENTER)
     {
       if (lives >= maxLives || timeLeft <= 0)
       {
@@ -274,6 +291,29 @@ void keyPressed()
         player.play();
       }
     }
+    else if (key == 'r' || key == 'R')
+    {
+      lives = maxLives;
+      totalTimeLeft = millis();
+    }
+    /*else if (key == 'p' || key == 'P')
+    {
+      paused = !paused;
+      if (paused)
+      {
+        loop();
+      }
+      else
+      {
+        fill(255, 0, 0);
+        textAlign(CENTER);
+        textSize(50);
+        text("PAUSED", width/2, height/2);
+        textSize(20);
+        text("Press \"P\" to unpause", width/2, height/2+50);
+        noLoop();
+      }
+    }*/
   }
 }
 void mouseClicked()
@@ -283,16 +323,22 @@ void mouseClicked()
   survival.ifClicked();
   timeAttack.ifClicked();
 }
-boolean declareTime = true;
-int timePassed;
-boolean timePassed(int howMuchTime)
+//boolean declareTime = true;
+//int timePassed;
+/*boolean timePassed(int howMuchTime)
 {
+  boolean declareTime;
+  int passedTime = 0;
+  if (passedTime != millis() + howMuchTime)
+  {
+    declareTime = true;
+  }
   if (declareTime == true)
   {
-    timePassed = millis() + howMuchTime;
+    passedTime = millis() + howMuchTime;
     declareTime = false;
   }
-  if (millis() >= timePassed)
+  if (millis() >= passedTime)
   {
     declareTime = true;
     return true;
@@ -301,5 +347,5 @@ boolean timePassed(int howMuchTime)
   {
     return false;
   }
-}
+}*/
 
