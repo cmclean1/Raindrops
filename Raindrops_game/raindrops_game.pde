@@ -29,7 +29,7 @@ int wut = 0;
 int time = 2000;
 int score;
 int lives;
-int maxLives = 10;
+int maxLives = 1;
 int Time = 2000;
 int introTime;
 int whichIntro = 0;
@@ -38,6 +38,7 @@ int timeLeft;
 int startTime;
 int totalTimeLeft;
 boolean paused = false;
+boolean gameOver = false;
 PFont  font = createFont("Gabriola-48.vlw", 10);
 String[] introString = {
   "You are the fate of the world", "You don't remember much", "but only one word rings through your head:"
@@ -176,15 +177,35 @@ void draw()
   }
   if (location == 1)
   {
-    gameLight.appear();
-    surviveMode();
+    textAlign(LEFT);
+    textSize(15);
+    text("Score: " + score, 420, 50);
+    if (!gameOver)
+    {
+      gameLight.appear();
+      surviveMode();
+    }
+    else
+    {
+      gameOver();
+    }
   }
   if (location == 2)
   {
-    gameLight.appear();
-    timeMode();
+    textAlign(LEFT);
+    textSize(15);
+    text("Score: " + score, 420, 50);
+    if (!gameOver)
+    {
+      gameLight.appear();
+      timeMode();
+    }
+    else
+    {
+      gameOver();
+    }
   }
-  if(location == 3)
+  if (location == 3)
   {
     storyMode();
   }
@@ -197,26 +218,26 @@ void stop()
 }
 void gameOver()
 {
-  fill(255, 0, 0);
-  textAlign(CENTER);
-  textSize(50);
-  text("GAME OVER", width/2, height/2);
-  textSize(20);
-  text("Press ENTER to return to menu", width/2, height/2+50);// \nPress H to view high scores", width/2, height/2+50);
-  noLoop();
+  if (gameOver)
+  {
+    fill(255, 0, 0);
+    textAlign(CENTER);
+    textSize(50);
+    text("GAME OVER", width/2, height/2);
+    textSize(20);
+    text("Press ENTER to return to menu", width/2, height/2+50);// \nPress H to view high scores", width/2, height/2+50);
+  }
 }
 void timeMode()
 {
   textAlign(LEFT);
   textSize(15);
-  text("Score: " + score, 420, 50);
   text("Time: " + int(timeLeft/1000+1), 50, 50);
   textSize(10);
   fill(255, 0, 0);
   // text("Press \"P\"  to pause", 10, 20);
   textAlign(RIGHT);
   text("Press \"R\"  to end early", 495, 20);
-
   if (location == 2)
   {
     for (int i = 0; i < gameRain.length; i++)
@@ -237,7 +258,7 @@ void timeMode()
     timeLeft = totalTimeLeft-millis();
     if (timeLeft <= 0)
     {
-      gameOver();
+      gameOver = true;
     }
   }
 }
@@ -271,26 +292,35 @@ void surviveMode()
     }
     if (lives >= maxLives)
     {
-      gameOver();
+      gameOver = true;
     }
   }
 }
 void keyPressed()
 {
-  if (location == 1 || location == 2)
+  if (location == 1 || location == 2 || location == 3)
   {
     if (keyCode == ENTER)
     {
       if (lives >= maxLives || timeLeft <= 0)
       {
-        loop();
-        location = 0;
+        if (location == 1 || location == 2)
+        {
+          location = 0;
+        }
+        if(location == 3)
+        {
+          storyLoc = 2;
+        }
         c = new Catcher();
+        r = new Raindrop[1];
+        r[0] = new Raindrop();
         time = millis() + Time;
         player.close();
         player = minim.loadFile("Water.wav");
         player.play();
         rainTimer.startTime = millis() + rainTimer.howmuchTime;
+        gameOver = false;
       }
     }
     else if (key == 'r' || key == 'R')
