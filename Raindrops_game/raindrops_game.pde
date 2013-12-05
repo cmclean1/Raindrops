@@ -22,10 +22,10 @@ Catcher gameCatch;
 Lightning menulight;
 Lightning gameLight;
 Timer rainTimer;
+Upgrade catchUp, lightDown, catchSpeed, catchHandle;
 String[] loadData;
 String[] survivalNames = new String[5];
 int[] survivalScores = new int[5];
-int wut = 0;
 int time = 2000;
 int score;
 int lives;
@@ -63,11 +63,12 @@ void setup()
   gameRain[0] = new Raindrop();
   menulight = new Lightning(500);
   gameLight = new Lightning(2000);
-  storyMode = new Button(width/2+30, "Story Mode", 0);
+  storyMode = new Button(width/2+30, "Story Mode", 3);
   timeAttack = new Button(width/2+60, "Time Attack", 2);
   survival = new Button(width/2+90, "Survival", 1);
   credits = new Button(width/2+120, "Credits", 4, false);
   back = new Button(width/2, "Back", 0, false);
+  catchUp = new Upgrade(0,0,5,10,2);
   rainTimer = new Timer(2000);
   minim = new Minim(this);
   rainminim = new Minim(this);
@@ -354,5 +355,6 @@ void mouseClicked()
   back.ifClicked();
   survival.ifClicked();
   timeAttack.ifClicked();
+  storyMode.ifClicked();
 }
 

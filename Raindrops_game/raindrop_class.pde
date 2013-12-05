@@ -52,6 +52,10 @@ class Raindrop
     {
       caught = true;
       score++;
+      if(location == 3)
+      {
+        totalRain++;
+      }
       Time-=0;//200;
       catcher.initialX = catcher.loc.x;
       catcher.iCaughtIt= true;
