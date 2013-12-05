@@ -68,7 +68,9 @@ void setup()
   survival = new Button(width/2+90, "Survival", 1);
   credits = new Button(width/2+120, "Credits", 4, false);
   back = new Button(width/2, "Back", 0, false);
-  catchUp = new Upgrade(0,0,5,10,2);
+  catchUp = new Upgrade(0, 0, 5, 10, 2, "Bigger Catcher");
+  lightDown = new Upgrade(0, 75, 5, 10, 2, "Less Lighting");
+  catchSpeed = new Upgrade(0, 150, 5, 10, 2, "Faster Catcher");
   rainTimer = new Timer(2000);
   minim = new Minim(this);
   rainminim = new Minim(this);
@@ -309,9 +311,10 @@ void keyPressed()
         {
           location = 0;
         }
-        if(location == 3)
+        if (location == 3)
         {
           storyLoc = 2;
+          storyDay++;
         }
         c = new Catcher();
         r = new Raindrop[1];
@@ -356,5 +359,33 @@ void mouseClicked()
   survival.ifClicked();
   timeAttack.ifClicked();
   storyMode.ifClicked();
+  if (mouseX > 390 && mouseX < 490 && mouseY > 440 && mouseY < 490)
+  {
+    storyLoc = 1;
+    gameCatch = new Catcher();
+    startTime = millis();
+    totalTimeLeft = millis() + timeLeft;
+    while (gameRain.length >= 1)
+    {
+      gameRain = (Raindrop[]) shorten(gameRain);
+    }
+    lives = 0;
+    player.close();
+    player = minim.loadFile("play.mp3");
+    player.play();
+  }
+  if (mouseX > 10 && mouseX < 60 && mouseY > 10 && mouseY < 35)
+  {
+    storyLoc = 1;
+    location = 0;
+    c = new Catcher();
+    r = new Raindrop[1];
+    r[0] = new Raindrop();
+    time = millis() + Time;
+    player.close();
+    player = minim.loadFile("Water.wav");
+    player.play();
+    rainTimer.startTime = millis() + rainTimer.howmuchTime;
+  }
 }
 

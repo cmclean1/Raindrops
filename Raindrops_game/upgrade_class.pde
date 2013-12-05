@@ -8,13 +8,15 @@ class Upgrade {
   float costUp;
   int max;
   int bought;
-  Upgrade(int _x, int _y, int _max, float _cost, float _costUp)
+  String name;
+  Upgrade(int _x, int _y, int _max, float _cost, float _costUp, String _name)
   {
     x = _x;
     y = _y;
     max = _max;
     cost = _cost;
     costUp = _costUp;
+    name = _name;
   }
   void display()
   {
@@ -22,6 +24,9 @@ class Upgrade {
     textAlign(CENTER);
     textSize(10);
     text(int(cost), x+45, y+93);
+    textSize(8);
+    textAlign(LEFT);
+    text(name, x+30, y+45);
     if (ifClicked())
     {
       if (totalRain < cost)
@@ -51,11 +56,11 @@ class Upgrade {
     fill(0, 0, 255, 100);
     if (totalRain < cost)
     {
-      rect(45+x+15, 65+x+15, -30, -(totalRain*30)/cost);
+      rect(60+x, 80+x, -30, -(totalRain*30)/cost);
     }
     else if (totalRain >=cost)
     {
-      rect(45+x+15, 65+x+15, -30, -30);
+      rect(60+x, 80+x, -30, -30);
     }
   }
   void buy()

@@ -1,5 +1,5 @@
-int storyLoc = 1;
-int storyDay;
+int storyLoc = 2;
+int storyDay = 0;
 void storyMode()
 {
   if (storyLoc == 1)
@@ -67,5 +67,18 @@ void storyOver()
 void upGrade()
 {
   catchUp.display();
+  lightDown.display();
+  catchSpeed.display();
+  fill(0);
+  stroke(0, 0, 255);
+  rect(390, 440, 100, 50);
+  rect(10, 10, 50, 25);
+  fill(0, 0, 255);
+  textAlign(CENTER);
+  textSize(10);
+  text("NEXT DAY", 440, 465);
+  text("MENU", 25, 25);
+  textSize(15);
+  text("DAY " + storyDay, 50, 440);
 }
 
