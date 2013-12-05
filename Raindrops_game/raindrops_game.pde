@@ -21,6 +21,7 @@ Catcher c;
 Catcher gameCatch;
 Lightning menulight;
 Lightning gameLight;
+Timer rainTimer;
 String[] loadData;
 String[] survivalNames = new String[5];
 int[] survivalScores = new int[5];
@@ -60,12 +61,13 @@ void setup()
   gameCatch = new Catcher();
   gameRain[0] = new Raindrop();
   menulight = new Lightning(500);
-  gameLight = new Lightning(1000);
+  gameLight = new Lightning(2000);
   storyMode = new Button(width/2+30, "Story Mode", 0);
   timeAttack = new Button(width/2+60, "Time Attack", 2);
   survival = new Button(width/2+90, "Survival", 1);
   credits = new Button(width/2+120, "Credits", 4, false);
   back = new Button(width/2, "Back", 0, false);
+  rainTimer = new Timer(2000);
   minim = new Minim(this);
   rainminim = new Minim(this);
   gunminim = new Minim(this);
@@ -143,10 +145,9 @@ void draw()
       r[i].move();
       r[i].checkCatcher(c);
     }
-    if (millis() >= time)
+    if (rainTimer.go())
     {
       r = (Raindrop[]) append(r, new Raindrop());
-      time+=Time;
     }
     //c.move();
     c.display();
@@ -197,7 +198,7 @@ void gameOver()
   textSize(50);
   text("GAME OVER", width/2, height/2);
   textSize(20);
-  text("Press ENTER to return to menu \nPress H to view high scores", width/2, height/2+50);
+  text("Press ENTER to return to menu", width/2, height/2+50);// \nPress H to view high scores", width/2, height/2+50);
   noLoop();
 }
 void timeMode()
@@ -208,7 +209,7 @@ void timeMode()
   text("Time: " + int(timeLeft/1000+1), 50, 50);
   textSize(10);
   fill(255, 0, 0);
- // text("Press \"P\"  to pause", 10, 20);
+  // text("Press \"P\"  to pause", 10, 20);
   textAlign(RIGHT);
   text("Press \"R\"  to end early", 495, 20);
 
@@ -220,10 +221,9 @@ void timeMode()
       gameRain[i].move();
       gameRain[i].checkCatcher(gameCatch);
     }
-    if (millis() >= time)
+    if (rainTimer.go())
     {
       gameRain = (Raindrop[]) append(gameRain, new Raindrop());
-      time+=Time;
     }
     gameCatch.display();
     if (gameCatch.checkLightning(gameLight) == false)
@@ -245,7 +245,7 @@ void surviveMode()
   text("Lives: " + (maxLives-lives), 50, 50);
   textSize(10);
   fill(255, 0, 0);
- // text("Press \"P\"  to pause", 10, 20);
+  // text("Press \"P\"  to pause", 10, 20);
   textAlign(RIGHT);
   text("Press \"R\"  to end early", 495, 20);
   if (location == 1)
@@ -256,10 +256,9 @@ void surviveMode()
       gameRain[i].move();
       gameRain[i].checkCatcher(gameCatch);
     }
-    if (millis() >= time)
+    if (rainTimer.go())
     {
       gameRain = (Raindrop[]) append(gameRain, new Raindrop());
-      time+=Time;
     }
     gameCatch.display();
     if (gameCatch.checkLightning(gameLight) == false)
@@ -289,6 +288,7 @@ void keyPressed()
         player.close();
         player = minim.loadFile("Water.wav");
         player.play();
+        rainTimer.startTime = millis() + rainTimer.howmuchTime;
       }
     }
     else if (key == 'r' || key == 'R')
@@ -297,23 +297,23 @@ void keyPressed()
       totalTimeLeft = millis();
     }
     /*else if (key == 'p' || key == 'P')
-    {
-      paused = !paused;
-      if (paused)
-      {
-        loop();
-      }
-      else
-      {
-        fill(255, 0, 0);
-        textAlign(CENTER);
-        textSize(50);
-        text("PAUSED", width/2, height/2);
-        textSize(20);
-        text("Press \"P\" to unpause", width/2, height/2+50);
-        noLoop();
-      }
-    }*/
+     {
+     paused = !paused;
+     if (paused)
+     {
+     loop();
+     }
+     else
+     {
+     fill(255, 0, 0);
+     textAlign(CENTER);
+     textSize(50);
+     text("PAUSED", width/2, height/2);
+     textSize(20);
+     text("Press \"P\" to unpause", width/2, height/2+50);
+     noLoop();
+     }
+     }*/
   }
 }
 void mouseClicked()
@@ -323,29 +323,4 @@ void mouseClicked()
   survival.ifClicked();
   timeAttack.ifClicked();
 }
-//boolean declareTime = true;
-//int timePassed;
-/*boolean timePassed(int howMuchTime)
-{
-  boolean declareTime;
-  int passedTime = 0;
-  if (passedTime != millis() + howMuchTime)
-  {
-    declareTime = true;
-  }
-  if (declareTime == true)
-  {
-    passedTime = millis() + howMuchTime;
-    declareTime = false;
-  }
-  if (millis() >= passedTime)
-  {
-    declareTime = true;
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}*/
 
