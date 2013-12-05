@@ -172,7 +172,7 @@ void draw()
     textSize(15);
     fill(0, 0, 255);
     textAlign(CORNER);
-    text("Coding: Clayton McLean \nMusic: Clayton Mclean \nSound Effects: The Internet \nArt: Clayton McLean \nDesign: Clayton McLean \nTesters: Clayton McLean \nProduced By: Clayton McLean \nSpecial Thanks to: Creators of Processing \nAnything and Everything else: Clayton McLean", 15, 25);
+    text("Coding: Clayton McLean \nMusic: Clayton Mclean \nSound Effects: The Internet \nArt: Clayton McLean \nDesign: Clayton McLean \nProduced By: Clayton McLean \nSpecial Thanks to: Creators of Processing \nAnything and Everything else: Clayton McLean", 15, 25);
   }
   if (location == 1)
   {
@@ -183,6 +183,10 @@ void draw()
   {
     gameLight.appear();
     timeMode();
+  }
+  if(location == 3)
+  {
+    storyMode();
   }
 }
 void stop()
@@ -281,9 +285,7 @@ void keyPressed()
       {
         loop();
         location = 0;
-        r = new Raindrop[1];
         c = new Catcher();
-        r[0] = new Raindrop();
         time = millis() + Time;
         player.close();
         player = minim.loadFile("Water.wav");
