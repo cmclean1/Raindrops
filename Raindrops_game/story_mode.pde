@@ -69,6 +69,18 @@ void upGrade()
   catchUp.display();
   lightDown.display();
   catchSpeed.display();
+  catchHandle.display();
+  catchMagnet.display();
+  catchHarvest.display();
+  buyShip.display();
+  powerUp.display();
+  portalGun.display();
+  lifeUp.display();
+  lowerScreen.display();
+  moreUp.display();
+  rainSlow.display();
+  catchCustom.display();
+  noLoss.display();
   fill(0);
   stroke(0, 0, 255);
   rect(390, 440, 100, 50);

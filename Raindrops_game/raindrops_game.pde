@@ -22,7 +22,7 @@ Catcher gameCatch;
 Lightning menulight;
 Lightning gameLight;
 Timer rainTimer;
-Upgrade catchUp, lightDown, catchSpeed, catchHandle;
+Upgrade catchUp, lightDown, catchSpeed, catchHandle, buyShip, catchMagnet, powerUp, lifeUp, catchHarvest, portalGun, lowerScreen, moreUp, rainSlow, catchCustom, noLoss;
 String[] loadData;
 String[] survivalNames = new String[5];
 int[] survivalScores = new int[5];
@@ -68,9 +68,24 @@ void setup()
   survival = new Button(width/2+90, "Survival", 1);
   credits = new Button(width/2+120, "Credits", 4, false);
   back = new Button(width/2, "Back", 0, false);
-  catchUp = new Upgrade(0, 0, 5, 10, 2, "Bigger Catcher");
-  lightDown = new Upgrade(0, 75, 5, 10, 2, "Less Lighting");
-  catchSpeed = new Upgrade(0, 150, 5, 10, 2, "Faster Catcher");
+  catchUp = new Upgrade(0, 0, 5, 10, 2, "Bigger Catcher"); //catcher
+  catchSpeed = new Upgrade(0, 75, 5, 10, 2, "Faster Catcher"); // catcher
+  catchHandle = new Upgrade(0, 150, 5, 10, 2, "Better Handling"); // catcher
+  lowerScreen = new Upgrade(0, 225, 5, 10, 2, "Lower Position"); // catcher
+  catchCustom = new Upgrade(0, 300, 5, 10, 2, "Customize Catcher"); // catcher
+
+  rainSlow = new Upgrade(150, 5, 5, 10, 2, "Slower Rain"); // envo
+  lightDown = new Upgrade(150, 75, 5, 10, 2, "Less Lighting"); // env
+  catchMagnet = new Upgrade(150, 150, 5, 10, 2, "Attractive Catcher"); //catcher/envo
+  catchHarvest = new Upgrade(150, 225, 5, 10, 2, "Raindrop Refine"); //catcher/enco
+  lifeUp = new Upgrade(150, 300, 5, 10, 2, "More Lives"); // envo
+
+  powerUp = new Upgrade(300, 5, 5, 10, 2, "Power Ups");// once
+  moreUp = new Upgrade(300, 75, 5, 10, 2, "Power Up Frequency"); // envo
+  noLoss = new Upgrade(300, 150, 5, 10, 2, "Chance to keep Life"); //envo
+  portalGun = new Upgrade(300, 225, 5, 10, 2, "Portals"); // once
+  buyShip = new Upgrade(300, 300, 5, 10, 2, "Ship Part"); // ult
+
   rainTimer = new Timer(2000);
   minim = new Minim(this);
   rainminim = new Minim(this);

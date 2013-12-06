@@ -56,11 +56,11 @@ class Upgrade {
     fill(0, 0, 255, 100);
     if (totalRain < cost)
     {
-      rect(60+x, 80+x, -30, -(totalRain*30)/cost);
+      rect(x+60, y+60, -30, -(totalRain*30)/cost);
     }
     else if (totalRain >=cost)
     {
-      rect(60+x, 80+x, -30, -30);
+      rect(60+x, 80+y, -30, -30);
     }
   }
   void buy()
