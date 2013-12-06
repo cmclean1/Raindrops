@@ -20,6 +20,7 @@ void storyMode()
 }
 void storyPlay()
 {
+  upgrade();
   textAlign(LEFT);
   textSize(15);
   text("Total: " + totalRain, 420, 50);
@@ -35,21 +36,22 @@ void storyPlay()
     {
       gameRain[i].display();
       gameRain[i].move();
-      gameRain[i].checkCatcher(gameCatch);
+      gameRain[i].checkCatcher(storyCatch);
     }
     if (rainTimer.go())
     {
       gameRain = (Raindrop[]) append(gameRain, new Raindrop());
     }
-    gameCatch.display();
+    storyCatch.display();
     if (gameCatch.checkLightning(gameLight) == false)
     {
-      gameCatch.move();
+      storyCatch.move();
     }
-    if (lives >= maxLives)
+    if (lives >= storyLives)
     {
       gameOver = true;
     }
+    gameLight.appear();
   }
 }
 void storyOver()

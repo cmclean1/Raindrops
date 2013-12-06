@@ -43,7 +43,7 @@ class Button {
       if (mode)
       {
         score = 0;
-        gameCatch = new Catcher();
+        gameCatch = new Catcher(400);
         timeLeft = 120000;
         startTime = millis();
         totalTimeLeft = millis() + timeLeft;

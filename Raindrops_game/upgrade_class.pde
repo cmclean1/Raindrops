@@ -21,19 +21,26 @@ class Upgrade {
   void display()
   {
     fill(255);
-    textAlign(CENTER);
+    textAlign(LEFT);
     textSize(10);
-    text(int(cost), x+45, y+93);
+    if (bought != max)
+    {
+      text(int(cost), x+35, y+93);
+    }
+    else if (bought == max)
+    {
+      text("ALL BOUGHT", x+30, y+93);
+    }
     textSize(8);
     textAlign(LEFT);
     text(name, x+30, y+45);
     if (ifClicked())
     {
-      if (totalRain < cost)
+      if (totalRain < cost || bought == max)
       {
         fill(255, 0, 0);
       }
-      else if (totalRain >=cost)
+      else if (totalRain >= cost && bought < max)
       {
         fill(#FF7C00);
       }
@@ -54,7 +61,10 @@ class Upgrade {
     ellipse(45+x, 70+y, 10, 10);
     triangle(40+x, 70+y, 50+x, 70+y, 45+x, 55+y);
     fill(0, 0, 255, 100);
-    if (totalRain < cost)
+    if (bought == max)
+    {
+    }
+    else if (totalRain < cost)
     {
       rect(x+60, y+60, -30, -(totalRain*30)/cost);
     }
@@ -65,7 +75,7 @@ class Upgrade {
   }
   void buy()
   {
-    if (ifClicked())
+    if (ifClicked() && bought < max)
     {
       if (totalRain >= cost)
       {
@@ -77,7 +87,7 @@ class Upgrade {
   }
   boolean ifClicked()
   {
-    if (dist(mouseX, mouseY, 45+x, 65+y) < 15)
+    if (dist(mouseX, mouseY, 45+x, 65+y) < 15 && storyLoc == 2)
     {
       return true;
     }
@@ -85,6 +95,22 @@ class Upgrade {
     {
       return false;
     }
+  }
+}
+
+void upgrade()
+{
+  for (int i = 0; i < catchUp.bought; i+=1)
+  {
+    storyCatch.d = 20+(i*5);
+  }
+  for (int i = 0; i < lowerScreen.bought; i+=1)
+  {
+    storyCatch.loc.y = 250+(i*25);
+  }
+    for (int i = 0; i < lightDown.bought; i+=1)
+  {
+    storyLight.random = 5000+(i*1000);
   }
 }
 

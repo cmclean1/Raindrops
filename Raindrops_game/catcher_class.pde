@@ -4,12 +4,14 @@ class Catcher
   PVector vel;
   PVector acc;
   int d;
+  float yLoc;
   float initialX;
   int nextRain = 0;
   boolean iCaughtIt = false;
-  Catcher()
+  Catcher(int _yLoc)
   {
-    loc = new PVector(width/2, 400);
+    yLoc = _yLoc;
+    loc = new PVector(width/2, yLoc);
     acc = new PVector(0, 0);
     initialX = loc.x;
     vel = new PVector(0, 0);
@@ -72,10 +74,10 @@ class Catcher
   }
   boolean checkLightning(Lightning l)
   {
-    if(l.show == true)
+    if (l.show == true)
     {
-      acc.set(0,0);
-      vel.set(0,0);
+      acc.set(0, 0);
+      vel.set(0, 0);
       return true;
     }
     else

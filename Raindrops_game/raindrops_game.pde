@@ -19,17 +19,20 @@ AudioPlayer gunPlayer;
 Button storyMode, timeAttack, survival, credits, back;
 Catcher c;
 Catcher gameCatch;
+Catcher storyCatch;
 Lightning menulight;
-Lightning gameLight;
+Lightning gameLight, storyLight;
 Timer rainTimer;
 Upgrade catchUp, lightDown, catchSpeed, catchHandle, buyShip, catchMagnet, powerUp, lifeUp, catchHarvest, portalGun, lowerScreen, moreUp, rainSlow, catchCustom, noLoss;
+//                               ^           ^          ^          ^          ^        ^          ^          6                       ^        ^      ^              ^
 String[] loadData;
 String[] survivalNames = new String[5];
 int[] survivalScores = new int[5];
 int time = 2000;
 int score;
 int lives;
-int maxLives = 1;
+int maxLives = 10;
+int storyLives = 10;
 int Time = 2000;
 int introTime;
 int whichIntro = 0;
@@ -56,35 +59,37 @@ void setup()
     survivalScores[i/2]=int(loadData[i]);
   }
   r = new Raindrop[1];
-  c = new Catcher();
+  c = new Catcher(400);
   r[0] = new Raindrop();
   gameRain = new Raindrop[1];
-  gameCatch = new Catcher();
+  gameCatch = new Catcher(400);
+  storyCatch = new Catcher(250);
   gameRain[0] = new Raindrop();
   menulight = new Lightning(500);
-  gameLight = new Lightning(2000);
+  gameLight = new Lightning(5000);
+  storyLight = new Lightning(5000);
   storyMode = new Button(width/2+30, "Story Mode", 3);
   timeAttack = new Button(width/2+60, "Time Attack", 2);
   survival = new Button(width/2+90, "Survival", 1);
   credits = new Button(width/2+120, "Credits", 4, false);
   back = new Button(width/2, "Back", 0, false);
-  catchUp = new Upgrade(0, 0, 5, 10, 2, "Bigger Catcher"); //catcher
-  catchSpeed = new Upgrade(0, 75, 5, 10, 2, "Faster Catcher"); // catcher
-  catchHandle = new Upgrade(0, 150, 5, 10, 2, "Better Handling"); // catcher
-  lowerScreen = new Upgrade(0, 225, 5, 10, 2, "Lower Position"); // catcher
-  catchCustom = new Upgrade(0, 300, 5, 10, 2, "Customize Catcher"); // catcher
+  catchUp = new Upgrade(0, 0, 5, 10, 2, "Bigger Catcher"); 
+  catchSpeed = new Upgrade(0, 75, 5, 10, 2, "Faster Catcher"); 
+  catchHandle = new Upgrade(0, 150, 5, 10, 2, "Better Handling"); 
+  lowerScreen = new Upgrade(0, 225, 5, 10, 2, "Lower Position"); 
+  catchCustom = new Upgrade(0, 300, 5, 10, 2, "Customize Catcher");
 
-  rainSlow = new Upgrade(150, 5, 5, 10, 2, "Slower Rain"); // envo
-  lightDown = new Upgrade(150, 75, 5, 10, 2, "Less Lighting"); // env
-  catchMagnet = new Upgrade(150, 150, 5, 10, 2, "Attractive Catcher"); //catcher/envo
-  catchHarvest = new Upgrade(150, 225, 5, 10, 2, "Raindrop Refine"); //catcher/enco
-  lifeUp = new Upgrade(150, 300, 5, 10, 2, "More Lives"); // envo
+  rainSlow = new Upgrade(150, 5, 5, 10, 2, "Slower Rain"); 
+  lightDown = new Upgrade(150, 75, 5, 10, 2, "Less Lighting"); 
+  catchMagnet = new Upgrade(150, 150, 5, 10, 2, "Attractive Catcher"); 
+  catchHarvest = new Upgrade(150, 225, 5, 10, 2, "Raindrop Refine"); 
+  lifeUp = new Upgrade(150, 300, 5, 10, 2, "More Lives"); 
 
-  powerUp = new Upgrade(300, 5, 5, 10, 2, "Power Ups");// once
-  moreUp = new Upgrade(300, 75, 5, 10, 2, "Power Up Frequency"); // envo
-  noLoss = new Upgrade(300, 150, 5, 10, 2, "Chance to keep Life"); //envo
-  portalGun = new Upgrade(300, 225, 5, 10, 2, "Portals"); // once
-  buyShip = new Upgrade(300, 300, 5, 10, 2, "Ship Part"); // ult
+  powerUp = new Upgrade(300, 5, 1, 10, 2, "Power Ups");
+  moreUp = new Upgrade(300, 75, 5, 10, 2, "Power Up Frequency"); 
+  noLoss = new Upgrade(300, 150, 5, 10, 2, "Chance to keep Life"); 
+  portalGun = new Upgrade(300, 225, 1, 10, 2, "Portals"); 
+  buyShip = new Upgrade(300, 300, 5, 10, 2, "Ship Part");
 
   rainTimer = new Timer(2000);
   minim = new Minim(this);
@@ -331,7 +336,7 @@ void keyPressed()
           storyLoc = 2;
           storyDay++;
         }
-        c = new Catcher();
+        c = new Catcher(400);
         r = new Raindrop[1];
         r[0] = new Raindrop();
         time = millis() + Time;
@@ -374,10 +379,13 @@ void mouseClicked()
   survival.ifClicked();
   timeAttack.ifClicked();
   storyMode.ifClicked();
+  catchUp.buy();
+  lowerScreen.buy();
+  lightDown.buy();
   if (mouseX > 390 && mouseX < 490 && mouseY > 440 && mouseY < 490)
   {
     storyLoc = 1;
-    gameCatch = new Catcher();
+    gameCatch = new Catcher(400);
     startTime = millis();
     totalTimeLeft = millis() + timeLeft;
     while (gameRain.length >= 1)
@@ -393,7 +401,7 @@ void mouseClicked()
   {
     storyLoc = 1;
     location = 0;
-    c = new Catcher();
+    c = new Catcher(400);
     r = new Raindrop[1];
     r[0] = new Raindrop();
     time = millis() + Time;
