@@ -24,7 +24,7 @@ void storyPlay()
   textAlign(LEFT);
   textSize(15);
   text("Total: " + totalRain, 420, 50);
-  text("Lives: " + (maxLives-lives), 50, 50);
+  text("Lives: " + (storyLives-lives), 50, 50);
   textSize(10);
   fill(255, 0, 0);
   // text("Press \"P\"  to pause", 10, 20);

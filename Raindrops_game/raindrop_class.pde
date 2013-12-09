@@ -1,3 +1,4 @@
+int lossChance;
 class Raindrop
 {
   PVector loc;
@@ -52,7 +53,7 @@ class Raindrop
     {
       caught = true;
       score++;
-      if(location == 3)
+      if (location == 3)
       {
         totalRain++;
       }
@@ -62,7 +63,15 @@ class Raindrop
     }
     if (loc.y >= height)
     {
-      lives++;
+      int lose = 1;
+      if (location == 3)
+      {
+        lose = int(random(0, 11-lossChance));
+      }
+      if (lose != 0)
+      {
+        lives++;
+      }
       miss = true;
     }
   }

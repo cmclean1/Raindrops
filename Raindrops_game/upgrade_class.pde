@@ -9,7 +9,7 @@ class Upgrade {
   int max;
   int bought;
   String name;
-  Upgrade(int _x, int _y, int _max, float _cost, float _costUp, String _name)
+  Upgrade(int _x, int _y, int _max, float _cost, float _costUp, String _name, int currentBought)
   {
     x = _x;
     y = _y;
@@ -17,6 +17,7 @@ class Upgrade {
     cost = _cost;
     costUp = _costUp;
     name = _name;
+    bought = int(loadStory[currentBought]);
   }
   void display()
   {
@@ -61,17 +62,6 @@ class Upgrade {
     ellipse(45+x, 70+y, 10, 10);
     triangle(40+x, 70+y, 50+x, 70+y, 45+x, 55+y);
     fill(0, 0, 255, 100);
-    if (bought == max)
-    {
-    }
-    else if (totalRain < cost)
-    {
-      rect(x+60, y+60, -30, -(totalRain*30)/cost);
-    }
-    else if (totalRain >=cost)
-    {
-      rect(60+x, 80+y, -30, -30);
-    }
   }
   void buy()
   {
@@ -104,13 +94,29 @@ void upgrade()
   {
     storyCatch.d = 20+(i*5);
   }
+  for (int i = 0; i < catchSpeed.bought; i+=1)
+  {
+    storyCatch.maxSpeed = 5+(i*.2);
+  }
+  for (int i = 0; i < catchHandle.bought; i+=1)
+  {
+    storyCatch.maxAcc = .01+(i*.025);
+  }
   for (int i = 0; i < lowerScreen.bought; i+=1)
   {
     storyCatch.loc.y = 250+(i*25);
   }
-    for (int i = 0; i < lightDown.bought; i+=1)
+  for (int i = 0; i < lightDown.bought; i+=1)
   {
     storyLight.random = 5000+(i*1000);
+  }
+  for (int i = 0; i <= lifeUp.bought; i++)
+  {
+    storyLives = 10+(i*3);
+  }
+  for(int i = 0; i <= noLoss.bought; i++)
+  {
+    lossChance = 0+i;
   }
 }
 

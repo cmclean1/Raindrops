@@ -24,7 +24,7 @@ Lightning menulight;
 Lightning gameLight, storyLight;
 Timer rainTimer;
 Upgrade catchUp, lightDown, catchSpeed, catchHandle, buyShip, catchMagnet, powerUp, lifeUp, catchHarvest, portalGun, lowerScreen, moreUp, rainSlow, catchCustom, noLoss;
-//                               ^           ^          ^          ^          ^        ^          ^          6                       ^        ^      ^              ^
+//                                                               ^          ^                   ^                                  ^        ^             ^           
 String[] loadData;
 String[] survivalNames = new String[5];
 int[] survivalScores = new int[5];
@@ -40,6 +40,9 @@ int location = 0;
 int timeLeft;
 int startTime;
 int totalTimeLeft;
+int[] saveData;
+String[] loadStory;
+String saveStory;
 boolean paused = false;
 boolean gameOver = false;
 PFont  font = createFont("Gabriola-48.vlw", 10);
@@ -49,6 +52,7 @@ String[] introString = {
 void setup()
 {
   size(500, 500);
+  loadStory = loadStrings("story.txt");
   loadData = loadStrings("survival.txt");
   for (int i = 0; i <= 8; i+=2)
   {
@@ -73,23 +77,23 @@ void setup()
   survival = new Button(width/2+90, "Survival", 1);
   credits = new Button(width/2+120, "Credits", 4, false);
   back = new Button(width/2, "Back", 0, false);
-  catchUp = new Upgrade(0, 0, 5, 10, 2, "Bigger Catcher"); 
-  catchSpeed = new Upgrade(0, 75, 5, 10, 2, "Faster Catcher"); 
-  catchHandle = new Upgrade(0, 150, 5, 10, 2, "Better Handling"); 
-  lowerScreen = new Upgrade(0, 225, 5, 10, 2, "Lower Position"); 
-  catchCustom = new Upgrade(0, 300, 5, 10, 2, "Customize Catcher");
+        catchUp = new Upgrade(0, 0, 5, 10, 2, "Bigger Catcher", 0); 
+  catchSpeed = new Upgrade(0, 75, 10, 10, 2, "Max Speed",1); 
+  catchHandle = new Upgrade(0, 150, 10, 10, 2, "Acceleation",2); 
+  lowerScreen = new Upgrade(0, 225, 10, 10, 2, "Lower Position",10); 
+  catchCustom = new Upgrade(0, 300, 4, 10, 2, "Customize Catcher",13);
 
-  rainSlow = new Upgrade(150, 5, 5, 10, 2, "Slower Rain"); 
-  lightDown = new Upgrade(150, 75, 5, 10, 2, "Less Lighting"); 
-  catchMagnet = new Upgrade(150, 150, 5, 10, 2, "Attractive Catcher"); 
-  catchHarvest = new Upgrade(150, 225, 5, 10, 2, "Raindrop Refine"); 
-  lifeUp = new Upgrade(150, 300, 5, 10, 2, "More Lives"); 
+  rainSlow = new Upgrade(150, 5, 5, 10, 2, "Slower Rain", 12); 
+  lightDown = new Upgrade(150, 75, 5, 10, 2, "Less Lighting", 3); 
+  catchMagnet = new Upgrade(150, 150, 5, 10, 2, "Attractive Catcher", 5); 
+  catchHarvest = new Upgrade(150, 225, 5, 10, 2, "Raindrop Refine", 8); 
+  lifeUp = new Upgrade(150, 300, 5, 10, 2, "More Lives", 8); 
 
-  powerUp = new Upgrade(300, 5, 1, 10, 2, "Power Ups");
-  moreUp = new Upgrade(300, 75, 5, 10, 2, "Power Up Frequency"); 
-  noLoss = new Upgrade(300, 150, 5, 10, 2, "Chance to keep Life"); 
-  portalGun = new Upgrade(300, 225, 1, 10, 2, "Portals"); 
-  buyShip = new Upgrade(300, 300, 5, 10, 2, "Ship Part");
+  powerUp = new Upgrade(300, 5, 1, 10, 2, "Power Ups", 6);
+  moreUp = new Upgrade(300, 75, 5, 10, 2, "Power Up Frequency", 11); 
+  noLoss = new Upgrade(300, 150, 7, 10, 2, "Chance to keep Life", 14); 
+  portalGun = new Upgrade(300, 225, 1, 10, 2, "Portals", 9); 
+  buyShip = new Upgrade(300, 300, 10, 10, 2, "Ship Part", 4);
 
   rainTimer = new Timer(2000);
   minim = new Minim(this);
@@ -149,6 +153,7 @@ void intro()
 
 void draw()
 {
+  portalGun.bought = 1;
   fill(0, 50);
   noStroke();
   rectMode(CORNER);
@@ -349,8 +354,18 @@ void keyPressed()
     }
     else if (key == 'r' || key == 'R')
     {
-      lives = maxLives;
-      totalTimeLeft = millis();
+      if (location == 1)
+      {
+        lives = maxLives;
+      }
+      else  if (location == 2)
+      {
+        totalTimeLeft = millis();
+      }
+      else if (location == 3)
+      {
+        lives = storyLives;
+      }
     }
     /*else if (key == 'p' || key == 'P')
      {
@@ -374,41 +389,53 @@ void keyPressed()
 }
 void mouseClicked()
 {
-  credits.ifClicked();
-  back.ifClicked();
-  survival.ifClicked();
-  timeAttack.ifClicked();
-  storyMode.ifClicked();
+  if (location == 0 || location == 4)
+  {
+    storyMode.ifClicked();
+    credits.ifClicked();
+    back.ifClicked();
+    survival.ifClicked();
+    timeAttack.ifClicked();
+  }
   catchUp.buy();
   lowerScreen.buy();
   lightDown.buy();
-  if (mouseX > 390 && mouseX < 490 && mouseY > 440 && mouseY < 490)
+  catchSpeed.buy();
+  catchHandle.buy();
+  lifeUp.buy();
+  noLoss.buy();
+  if (storyLoc == 2)
   {
-    storyLoc = 1;
-    gameCatch = new Catcher(400);
-    startTime = millis();
-    totalTimeLeft = millis() + timeLeft;
-    while (gameRain.length >= 1)
+    if (mouseX > 390 && mouseX < 490 && mouseY > 440 && mouseY < 490)
     {
-      gameRain = (Raindrop[]) shorten(gameRain);
+      storyLoc = 1;
+      gameCatch = new Catcher(400);
+      startTime = millis();
+      totalTimeLeft = millis() + timeLeft;
+      while (gameRain.length >= 1)
+      {
+        gameRain = (Raindrop[]) shorten(gameRain);
+      }
+      lives = 0;
+      player.close();
+      player = minim.loadFile("play.mp3");
+      player.play();
+      //                 1                        2                          3                         4                         5                      6                       7                    8                        9                   10                             11                       12                      13                 14                   15
+      saveStory =   catchUp.bought + "," + catchSpeed.bought + "," + catchHandle.bought + "," + lightDown.bought + "," + buyShip.bought+ "," + catchMagnet.bought+ "," + powerUp.bought+ "," + lifeUp.bought+ "," + catchHarvest.bought+ "," + portalGun.bought+ "," + lowerScreen.bought+ "," + moreUp.bought+ "," + rainSlow.bought+ "," + catchCustom.bought+ "," + noLoss.bought;
+      String[] save = split(saveStory, ",");
+      saveStrings("story.txt", save);
+
     }
-    lives = 0;
-    player.close();
-    player = minim.loadFile("play.mp3");
-    player.play();
-  }
-  if (mouseX > 10 && mouseX < 60 && mouseY > 10 && mouseY < 35)
-  {
-    storyLoc = 1;
-    location = 0;
-    c = new Catcher(400);
-    r = new Raindrop[1];
-    r[0] = new Raindrop();
-    time = millis() + Time;
-    player.close();
-    player = minim.loadFile("Water.wav");
-    player.play();
-    rainTimer.startTime = millis() + rainTimer.howmuchTime;
+    if (mouseX > 10 && mouseX < 60 && mouseY > 10 && mouseY < 35)
+    {
+      storyLoc = 1;
+      location = 0;
+      c = new Catcher(400);
+      r = new Raindrop[1];
+      r[0] = new Raindrop();
+      time = millis() + Time;
+      rainTimer.startTime = millis() + rainTimer.howmuchTime;
+    }
   }
 }
 
