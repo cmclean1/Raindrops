@@ -87,6 +87,7 @@ void upGrade()
   stroke(0, 0, 255);
   rect(390, 440, 100, 50);
   rect(10, 10, 50, 25);
+  rect(50, 450, 80, 40);
   fill(0, 0, 255);
   textAlign(CENTER);
   textSize(10);
