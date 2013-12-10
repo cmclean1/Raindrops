@@ -114,9 +114,16 @@ void upgrade()
   {
     storyLives = 10+(i*3);
   }
-  for(int i = 0; i <= noLoss.bought; i++)
+  for (int i = 0; i <= noLoss.bought; i++)
   {
     lossChance = 0+i;
+  }
+  for (int i = 0; i <= rainSlow.bought; i++)
+  {
+    for (int i = 0; i <= gameRain.length; i++)
+    {
+      gameRain.changeV = .1-(i*.01);
+    }
   }
 }
 

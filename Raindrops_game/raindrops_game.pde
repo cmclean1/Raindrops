@@ -24,7 +24,7 @@ Lightning menulight;
 Lightning gameLight, storyLight;
 Timer rainTimer;
 Upgrade catchUp, lightDown, catchSpeed, catchHandle, buyShip, catchMagnet, powerUp, lifeUp, catchHarvest, portalGun, lowerScreen, moreUp, rainSlow, catchCustom, noLoss;
-//                                                               ^          ^                   ^                                  ^        ^             ^           
+//                                                               ^          ^                   ^                                  ^        ^                        
 String[] loadData;
 String[] survivalNames = new String[5];
 int[] survivalScores = new int[5];
@@ -50,7 +50,7 @@ String[] introString = {
   "You are the fate of the world", "You don't remember much", "but only one word rings through your head:"
 };
 color[]   catcherColor = {
-  color(255), color(0, 0, 255), color(0, 255, 0), color(255, 0, 0), color(20),  color(255, 5),
+  color(255), color(0, 0, 255), color(0, 255, 0), color(255, 0, 0), color(20), color(255, 5),
 };
 ;
 color[] rainColor = {
@@ -296,6 +296,7 @@ void timeMode()
   {
     for (int i = 0; i < gameRain.length; i++)
     {
+      gameRain[i].changeV = .1;
       gameRain[i].display();
       gameRain[i].move();
       gameRain[i].checkCatcher(gameCatch);
@@ -331,6 +332,7 @@ void surviveMode()
   {
     for (int i = 0; i < gameRain.length; i++)
     {
+      gameRain[i].changeV = .1;
       gameRain[i].display();
       gameRain[i].move();
       gameRain[i].checkCatcher(gameCatch);
@@ -475,6 +477,7 @@ void mouseClicked()
   lifeUp.buy();
   noLoss.buy();
   catchCustom.buy();
+  rainSlow.buy();
   if (storyLoc == 2)
   {
     if (mouseX > 390 && mouseX < 490 && mouseY > 440 && mouseY < 490)
