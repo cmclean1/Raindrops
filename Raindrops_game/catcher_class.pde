@@ -10,8 +10,10 @@ class Catcher
   float maxAcc;
   int nextRain = 0;
   boolean iCaughtIt = false;
+  color c;
   Catcher(int _yLoc)
   {
+    c = catcherColor[catcherWhich];    
     yLoc = _yLoc;
     loc = new PVector(width/2, yLoc);
     maxAcc = .1;
@@ -23,7 +25,7 @@ class Catcher
   }
   void display()
   {
-    fill(255);
+    fill(c);
     ellipse(loc.x, loc.y, d, d);
   }
   void autoMove(Raindrop[] wut)
@@ -101,7 +103,7 @@ class Catcher
       acc.x = 0;
       loc.x--;
     }
-    else if(loc.x <= d/2)
+    else if (loc.x <= d/2)
     {
       vel.x = 0;
       acc.x = 0;

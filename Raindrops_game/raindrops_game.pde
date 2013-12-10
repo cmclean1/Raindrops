@@ -49,6 +49,21 @@ PFont  font = createFont("Gabriola-48.vlw", 10);
 String[] introString = {
   "You are the fate of the world", "You don't remember much", "but only one word rings through your head:"
 };
+color[]   catcherColor = {
+  color(255), color(0, 0, 255), color(0, 255, 0), color(255, 0, 0), color(20),  color(255, 5),
+};
+;
+color[] rainColor = {
+  color(0, 0, 255), color(255), color(0, 255, 0), color(255, 0, 0), color(20), color(0, 0, 255, 50),
+};
+String[] catcherName = {
+  "White", "Blue", "Green", "Red", "Dark", "Ghost"
+};
+int catcherWhich = 0;
+int rainWhich = 0;
+String[] rainName= {
+  "Normal", "Pure", "Slime", "Blood", "Dark", "Transparent"
+};
 void setup()
 {
   size(500, 500);
@@ -81,7 +96,7 @@ void setup()
   catchSpeed = new Upgrade(0, 75, 10, 10, 2, "Max Speed", 1); 
   catchHandle = new Upgrade(0, 150, 10, 10, 2, "Acceleation", 2); 
   lowerScreen = new Upgrade(0, 225, 10, 10, 2, "Lower Position", 10); 
-  catchCustom = new Upgrade(0, 300, 4, 10, 2, "Customize Catcher", 13);
+  catchCustom = new Upgrade(0, 300, 1, 10, 2, "Customize Catcher", 13);
 
   rainSlow = new Upgrade(150, 5, 5, 10, 2, "Slower Rain", 12); 
   lightDown = new Upgrade(150, 75, 5, 10, 2, "Less Lighting", 3); 
@@ -378,6 +393,50 @@ void keyPressed()
         lives = storyLives;
       }
     }
+    if (key == 'a' || key == 'A')
+    {
+      if (storyLoc == 3)
+      {
+        catcherWhich--;
+        if (catcherWhich <= 0)
+        {
+          catcherWhich = catcherColor.length-1;
+        }
+      }
+    }
+    if (key == 'd' || key == 'D')
+    {
+      if (storyLoc == 3)
+      {
+        catcherWhich++;
+        if (catcherWhich >= catcherColor.length)
+        {
+          catcherWhich = 0;
+        }
+      }
+    }
+    if (key == 'j' || key == 'J')
+    {
+      if (storyLoc == 3)
+      {
+        rainWhich--;
+        if (rainWhich <= 0)
+        {
+          rainWhich = rainColor.length-1;
+        }
+      }
+    }
+    if (key == 'l' || key == 'L')
+    {
+      if (storyLoc == 3)
+      {
+        rainWhich++;
+        if (rainWhich >= rainColor.length)
+        {
+          rainWhich = 0;
+        }
+      }
+    }
     /*else if (key == 'p' || key == 'P')
      {
      paused = !paused;
@@ -415,12 +474,13 @@ void mouseClicked()
   catchHandle.buy();
   lifeUp.buy();
   noLoss.buy();
+  catchCustom.buy();
   if (storyLoc == 2)
   {
     if (mouseX > 390 && mouseX < 490 && mouseY > 440 && mouseY < 490)
     {
       storyLoc = 1;
-      gameCatch = new Catcher(400);
+      storyCatch = new Catcher(0);
       startTime = millis();
       totalTimeLeft = millis() + timeLeft;
       while (gameRain.length >= 1)
@@ -431,7 +491,6 @@ void mouseClicked()
       player.close();
       player = minim.loadFile("play.mp3");
       player.play();
-      //                 1                        2                          3                         4                         5                      6                       7                    8                        9                   10                             11                       12                      13                 14                   15
       saveStory =   catchUp.bought + "," + catchSpeed.bought + "," + catchHandle.bought + "," + lightDown.bought + "," + buyShip.bought+ "," + catchMagnet.bought+ "," + powerUp.bought+ "," + lifeUp.bought+ "," + catchHarvest.bought+ "," + portalGun.bought+ "," + lowerScreen.bought+ "," + moreUp.bought+ "," + rainSlow.bought+ "," + catchCustom.bought+ "," + noLoss.bought;
       String[] save = split(saveStory, ",");
       saveStrings("story.txt", save);
@@ -445,6 +504,17 @@ void mouseClicked()
       r[0] = new Raindrop();
       time = millis() + Time;
       rainTimer.startTime = millis() + rainTimer.howmuchTime;
+    }
+    if (mouseX > 50 && mouseX <50+80  && mouseY > 450 && mouseY < 490 && catchCustom.bought >= 1)
+    {
+      storyLoc = 3;
+    }
+  }
+  if (storyLoc == 3)
+  {
+    if (mouseX > 10 && mouseX < 60 && mouseY > 10 && mouseY < 35)
+    {
+      storyLoc = 2;
     }
   }
 }

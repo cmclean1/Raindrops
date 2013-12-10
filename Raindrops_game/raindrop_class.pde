@@ -30,19 +30,18 @@ class Raindrop
   }
   void decideIfPower()
   {
-    if(powerChance() && setPower)
+    if (powerChance() && setPower)
     {
       isPower = true;
     }
     setPower = false;
-    
   }
   void display()
   {
-    fill(0, 0, 255);
-    if(isPower)
+    fill(rainColor[rainWhich]);
+    if (isPower)
     {
-      fill(random(255),random(255),random(255));
+      fill(random(255), random(255), random(255));
     }
     noStroke();
     ellipse(loc.x, loc.y, d, d);
@@ -65,13 +64,13 @@ class Raindrop
   }
   boolean powerChance()
   {
-     int wut = int(random(1));
-    if(wut == 0)
+    int wut = int(random(1));
+    if (wut == 0)
     {
       return true;
     }
     else
-    return false;
+      return false;
   }
   void checkCatcher(Catcher catcher)
   {
@@ -86,7 +85,7 @@ class Raindrop
       Time-=0;
       catcher.initialX = catcher.loc.x;
       catcher.iCaughtIt= true;
-      if(isPower)
+      if (isPower)
       {
 
         goPower();

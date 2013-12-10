@@ -1,5 +1,6 @@
 int storyLoc = 2;
 int storyDay = 0;
+
 void storyMode()
 {
   if (storyLoc == 1)
@@ -16,6 +17,10 @@ void storyMode()
   if (storyLoc == 2)
   {
     upGrade();
+  }
+  if (storyLoc == 3)
+  {
+    customize();
   }
 }
 void storyPlay()
@@ -87,13 +92,43 @@ void upGrade()
   stroke(0, 0, 255);
   rect(390, 440, 100, 50);
   rect(10, 10, 50, 25);
-  rect(50, 450, 80, 40);
+  if (catchCustom.bought >= 1)
+  {
+    rect(50, 450, 80, 40);
+  }
   fill(0, 0, 255);
   textAlign(CENTER);
   textSize(10);
   text("NEXT DAY", 440, 465);
   text("MENU", 25, 25);
+  if (catchCustom.bought >= 1)
+  {
+    text("CUSTIMIZATION", 90, 475);
+  }
   textSize(15);
   text("DAY " + storyDay, 50, 440);
+}
+void customize()
+{
+  textSize(10);
+  fill(0);
+  stroke(0, 0, 255);
+  rect(10, 10, 50, 25);
+  fill(0, 0, 255);
+  text("BACK", 25, 25);
+  textSize(15);
+  fill(catcherColor[catcherWhich]);
+  noStroke();
+  ellipse(width/3, height/2, 50, 50);
+  text(catcherName[catcherWhich] + " Catcher", width/3, height/2+50);
+  fill(rainColor[rainWhich]);
+  text(rainName[rainWhich] + " Rain", width-(width/3), height/2+50);
+  ellipse(width-(width/3), height/2+10, 30, 30);
+  triangle(width-(width/3)-15, height/2+10, width-(width/3)+15, height/2+10, width-(width/3), height/2-30);
+  fill(255);
+  text("A <", width/3-50, height/2+10);
+  text("> D", width/3+50, height/2+10);
+  text("J <", width-(width/3)-50, height/2+10);
+  text("> L", width-(width/3)+50, height/2+10);
 }
 

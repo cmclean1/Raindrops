@@ -44,6 +44,7 @@ class Button {
       {
         score = 0;
         gameCatch = new Catcher(400);
+        storyCatch = new Catcher(400);
         timeLeft = 120000;
         startTime = millis();
         totalTimeLeft = millis() + timeLeft;
