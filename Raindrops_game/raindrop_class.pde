@@ -12,6 +12,8 @@ class Raindrop
   float dropheight;
   float initialV;
   float finalV;
+  boolean setPower;
+  boolean isPower;
   Raindrop()
   {
     dropheight = 400;
@@ -24,10 +26,24 @@ class Raindrop
     finalV = acc.y*distance;
     d = 10;
     caught = false;
+    setPower = true;
+  }
+  void decideIfPower()
+  {
+    if(powerChance() && setPower)
+    {
+      isPower = true;
+    }
+    setPower = false;
+    
   }
   void display()
   {
     fill(0, 0, 255);
+    if(isPower)
+    {
+      fill(random(255),random(255),random(255));
+    }
     noStroke();
     ellipse(loc.x, loc.y, d, d);
     triangle(loc.x-d/2, loc.y, loc.x+d/2, loc.y, loc.x, loc.y-(vel.y*5));
@@ -47,6 +63,16 @@ class Raindrop
       loc.y = -100;
     }
   }
+  boolean powerChance()
+  {
+     int wut = int(random(1));
+    if(wut == 0)
+    {
+      return true;
+    }
+    else
+    return false;
+  }
   void checkCatcher(Catcher catcher)
   {
     if (dist(loc.x, loc.y, catcher.loc.x, catcher.loc.y) <= (d/2)+(catcher.d/2))
@@ -57,9 +83,14 @@ class Raindrop
       {
         totalRain++;
       }
-      Time-=0;//200;
+      Time-=0;
       catcher.initialX = catcher.loc.x;
       catcher.iCaughtIt= true;
+      if(isPower)
+      {
+
+        goPower();
+      }
     }
     if (loc.y >= height)
     {

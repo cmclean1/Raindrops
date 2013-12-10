@@ -77,11 +77,11 @@ void setup()
   survival = new Button(width/2+90, "Survival", 1);
   credits = new Button(width/2+120, "Credits", 4, false);
   back = new Button(width/2, "Back", 0, false);
-        catchUp = new Upgrade(0, 0, 5, 10, 2, "Bigger Catcher", 0); 
-  catchSpeed = new Upgrade(0, 75, 10, 10, 2, "Max Speed",1); 
-  catchHandle = new Upgrade(0, 150, 10, 10, 2, "Acceleation",2); 
-  lowerScreen = new Upgrade(0, 225, 10, 10, 2, "Lower Position",10); 
-  catchCustom = new Upgrade(0, 300, 4, 10, 2, "Customize Catcher",13);
+  catchUp = new Upgrade(0, 0, 5, 10, 2, "Bigger Catcher", 0); 
+  catchSpeed = new Upgrade(0, 75, 10, 10, 2, "Max Speed", 1); 
+  catchHandle = new Upgrade(0, 150, 10, 10, 2, "Acceleation", 2); 
+  lowerScreen = new Upgrade(0, 225, 10, 10, 2, "Lower Position", 10); 
+  catchCustom = new Upgrade(0, 300, 4, 10, 2, "Customize Catcher", 13);
 
   rainSlow = new Upgrade(150, 5, 5, 10, 2, "Slower Rain", 12); 
   lightDown = new Upgrade(150, 75, 5, 10, 2, "Less Lighting", 3); 
@@ -236,6 +236,17 @@ void draw()
   if (location == 3)
   {
     storyMode();
+  }
+  textAlign(CENTER);
+  textSize(20);
+  println(displayPower);
+  if (displayPower && millis() < powerTime+2000)
+  {
+    text(powerText, width/2, height/2);
+  }
+  else
+  {
+    displayPower = false;
   }
 }
 void stop()
@@ -424,7 +435,6 @@ void mouseClicked()
       saveStory =   catchUp.bought + "," + catchSpeed.bought + "," + catchHandle.bought + "," + lightDown.bought + "," + buyShip.bought+ "," + catchMagnet.bought+ "," + powerUp.bought+ "," + lifeUp.bought+ "," + catchHarvest.bought+ "," + portalGun.bought+ "," + lowerScreen.bought+ "," + moreUp.bought+ "," + rainSlow.bought+ "," + catchCustom.bought+ "," + noLoss.bought;
       String[] save = split(saveStory, ",");
       saveStrings("story.txt", save);
-
     }
     if (mouseX > 10 && mouseX < 60 && mouseY > 10 && mouseY < 35)
     {
