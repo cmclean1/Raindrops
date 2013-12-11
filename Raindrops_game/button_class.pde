@@ -46,7 +46,7 @@ class Button {
         }
         lives = 0;
         player.close();
-        player = minim.loadFile("play" + int(random(1,3)) + ".mp3");
+        player = minim.loadFile("play" + int(random(1,4)) + ".mp3");
         player.loop();
       }
     }
