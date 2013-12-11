@@ -1,46 +1,41 @@
+//imports stuff for sound
 import ddf.minim.spi.*;
 import ddf.minim.signals.*;
 import ddf.minim.*;
 import ddf.minim.analysis.*;
 import ddf.minim.ugens.*;
 import ddf.minim.effects.*;
-
+//one raindrop array for the menu, and one for the actual game
 Raindrop[] r;
 Raindrop[] gameRain;
-
-Minim minim;
-Minim rainminim;
+// variables needed for music and sound effects
+Minim minim; //music
 AudioPlayer player;
+Minim rainminim;//rain effect
 AudioPlayer rain;
-Minim lightminim;
+Minim lightminim;//lightning effect
 AudioPlayer lightPlayer;
-Minim gunminim;
+Minim gunminim;//gun shot effect
 AudioPlayer gunPlayer;
+
 Button storyMode, timeAttack, survival, credits, back;
-Catcher c;
-Catcher gameCatch;
-Catcher storyCatch;
-Lightning menulight;
-Lightning gameLight, storyLight;
+//one catcher for the menu, one for survival/time attack mode, and one for story mode
+Catcher c, gameCatch, storyCatch;
+//lightning for menu, survival/time attack and story mode
+Lightning menulight, gameLight, storyLight;
+//timer for falling rain
 Timer rainTimer;
 Upgrade catchUp, lightDown, catchSpeed, catchHandle, buyShip, catchMagnet, powerUp, lifeUp, catchHarvest, portalGun, lowerScreen, moreUp, rainSlow, catchCustom, noLoss;
-//                                                               ^          ^                   ^                                  ^        ^                        
-String[] loadData;
-String[] survivalNames = new String[5];
-int[] survivalScores = new int[5];
-int time = 2000;
 int score;
 int lives;
 int maxLives = 10;
 int storyLives = 10;
-int Time = 2000;
 int introTime;
 int whichIntro = 0;
 int location = 0;
 int timeLeft;
 int startTime;
 int totalTimeLeft;
-int[] saveData;
 String[] loadStory;
 String saveStory;
 boolean paused = false;
@@ -49,6 +44,7 @@ PFont  font = createFont("Gabriola-48.vlw", 10);
 String[] introString = {
   "You are the fate of the world", "You don't remember much", "but only one word rings through your head:"
 };
+//arrays and variables for catcher/raindrop color customization
 color[]   catcherColor = {
   color(255), color(0, 0, 255), color(0, 255, 0), color(255, 0, 0), color(20), color(255, 5),
 };
@@ -67,16 +63,11 @@ String[] rainName= {
 void setup()
 {
   size(500, 500);
+  //load numbers from text file
   loadStory = loadStrings("story.txt");
-  loadData = loadStrings("survival.txt");
-  for (int i = 0; i <= 8; i+=2)
-  {
-    survivalNames[i/2]=loadData[i];
-  }
-  for (int i = 0; i <= 8; i+=2)
-  {
-    survivalScores[i/2]=int(loadData[i]);
-  }
+  //numbers from text file can be accessed like this:
+  totalRain = int(loadStory[15]);
+  storyDay = int(loadStory[16]);
   r = new Raindrop[1];
   c = new Catcher(400);
   r[0] = new Raindrop();
@@ -87,9 +78,9 @@ void setup()
   menulight = new Lightning(500);
   gameLight = new Lightning(5000);
   storyLight = new Lightning(5000);
-  storyMode = new Button(width/2+30, "Story Mode", 3);
-  timeAttack = new Button(width/2+60, "Time Attack", 2);
-  survival = new Button(width/2+90, "Survival", 1);
+  storyMode = new Button(width/2+30, "Story Mode", 3, true);
+  timeAttack = new Button(width/2+60, "Time Attack", 2, true);
+  survival = new Button(width/2+90, "Survival", 1, true);
   credits = new Button(width/2+120, "Credits", 4, false);
   back = new Button(width/2, "Back", 0, false);
   catchUp = new Upgrade(0, 0, 5, 10, 2, "Bigger Catcher", 0); 
@@ -107,7 +98,7 @@ void setup()
   powerUp = new Upgrade(300, 5, 1, 10, 2, "Power Ups", 6);
   moreUp = new Upgrade(300, 75, 5, 10, 2, "Power Up Frequency", 11); 
   noLoss = new Upgrade(300, 150, 7, 10, 2, "Chance to keep Life", 14); 
-  portalGun = new Upgrade(300, 225, 1, 10, 2, "Portals", 9); 
+  portalGun = new Upgrade(300, 225, 1, 10, 15, "Portals", 9); 
   buyShip = new Upgrade(300, 300, 10, 10, 2, "Ship Part", 4);
 
   rainTimer = new Timer(2000);
@@ -120,6 +111,7 @@ void setup()
   lightPlayer = lightminim.loadFile("blast.wav");
   gunPlayer = gunminim.loadFile("gun.mp3");
 }
+//shows logo for 5 seconds then goes to intro
 void Logo()
 {
   if (millis() < 5000)
@@ -136,6 +128,7 @@ void Logo()
     rain.loop();
   }
 }
+//plays intro then goes to menu screen
 void intro()
 {
   textFont(font);
@@ -160,7 +153,6 @@ void intro()
   if (whichIntro >3)
   {
     location = 0;    
-    time = millis()+Time;
     player.setGain(0);
     player.loop();
   }
@@ -168,12 +160,12 @@ void intro()
 
 void draw()
 {
-  portalGun.bought = 1;
+  //creates the effect of a transparent background
   fill(0, 50);
   noStroke();
   rectMode(CORNER);
   rect(0, 0, width, height);
-  if (location == -2)
+  if (location == -2)//I put Logo() and Intro() last and didn't feel like changing location to all positive numbers, not that it matters
   {
     Logo();
   }
@@ -252,18 +244,21 @@ void draw()
   {
     storyMode();
   }
+  //the following will be used for powerups when they actually work
+  /*
   textAlign(CENTER);
-  textSize(20);
-  println(displayPower);
-  if (displayPower && millis() < powerTime+2000)
-  {
-    text(powerText, width/2, height/2);
-  }
-  else
-  {
-    displayPower = false;
-  }
+   textSize(20);
+   println(displayPower);
+   if (displayPower && millis() < powerTime+2000)
+   {
+   text(powerText, width/2, height/2);
+   }
+   else
+   {
+   displayPower = false;
+   }*/
 }
+//necessary to stop sound files from playing
 void stop()
 {
   player.close();
@@ -279,24 +274,23 @@ void gameOver()
     textSize(50);
     text("GAME OVER", width/2, height/2);
     textSize(20);
-    text("Press ENTER to return to menu", width/2, height/2+50);// \nPress H to view high scores", width/2, height/2+50);
+    text("Press ENTER to return to menu", width/2, height/2+50);
   }
 }
-void timeMode()
+void timeMode()//game over will happen when 120 seconds are up
 {
   textAlign(LEFT);
   textSize(15);
   text("Time: " + int(timeLeft/1000+1), 50, 50);
   textSize(10);
   fill(255, 0, 0);
-  // text("Press \"P\"  to pause", 10, 20);
   textAlign(RIGHT);
   text("Press \"R\"  to end early", 495, 20);
   if (location == 2)
   {
     for (int i = 0; i < gameRain.length; i++)
     {
-      gameRain[i].changeV = .1;
+      gameRain[i].changeV = .1;//changeV would be decreased because of story mode if I didn't put this
       gameRain[i].display();
       gameRain[i].move();
       gameRain[i].checkCatcher(gameCatch);
@@ -317,7 +311,7 @@ void timeMode()
     }
   }
 }
-void surviveMode()
+void surviveMode()//ten lives, game over will happen if all lives are lost
 {
   textAlign(LEFT);
   textSize(15);
@@ -325,7 +319,6 @@ void surviveMode()
   text("Lives: " + (maxLives-lives), 50, 50);
   textSize(10);
   fill(255, 0, 0);
-  // text("Press \"P\"  to pause", 10, 20);
   textAlign(RIGHT);
   text("Press \"R\"  to end early", 495, 20);
   if (location == 1)
@@ -356,7 +349,7 @@ void keyPressed()
 {
   if (location == 1 || location == 2 || location == 3)
   {
-    if (keyCode == ENTER)
+    if (keyCode == ENTER)//returns to menu screen or upprade menu if on story mode
     {
       if (lives >= maxLives || timeLeft <= 0)
       {
@@ -366,21 +359,24 @@ void keyPressed()
         }
         if (location == 3)
         {
+          //story mode is automatically saved onto story.txt every time a day ends
           storyLoc = 2;
           storyDay++;
+          saveStory =   catchUp.bought + "," + catchSpeed.bought + "," + catchHandle.bought + "," + lightDown.bought + "," + buyShip.bought+ "," + catchMagnet.bought+ "," + powerUp.bought+ "," + lifeUp.bought+ "," + catchHarvest.bought+ "," + portalGun.bought+ "," + lowerScreen.bought+ "," + moreUp.bought+ "," + rainSlow.bought+ "," + catchCustom.bought+ "," + noLoss.bought + "," + totalRain + "," + storyDay ;
+          String[] save = split(saveStory, ",");
+          saveStrings("story.txt", save);
         }
-        c = new Catcher(400);
+        c = new Catcher(400);//resets menu screen and restarts menu music
         r = new Raindrop[1];
         r[0] = new Raindrop();
-        time = millis() + Time;
-        player.close();
+        player.close();//resets music
         player = minim.loadFile("Water.wav");
         player.play();
         rainTimer.startTime = millis() + rainTimer.howmuchTime;
         gameOver = false;
       }
     }
-    else if (key == 'r' || key == 'R')
+    else if (key == 'r' || key == 'R')//ends a game early by creating the game over requirements
     {
       if (location == 1)
       {
@@ -395,7 +391,7 @@ void keyPressed()
         lives = storyLives;
       }
     }
-    if (key == 'a' || key == 'A')
+    if (key == 'a' || key == 'A') //letters A, D, J and L cycle through catcher and raindrop customization colors
     {
       if (storyLoc == 3)
       {
@@ -439,6 +435,7 @@ void keyPressed()
         }
       }
     }
+    //the following is a pause function I am working on
     /*else if (key == 'p' || key == 'P')
      {
      paused = !paused;
@@ -471,6 +468,7 @@ void mouseClicked()
   }
   catchUp.buy();
   lowerScreen.buy();
+  portalGun.buy();
   lightDown.buy();
   catchSpeed.buy();
   catchHandle.buy();
@@ -483,20 +481,40 @@ void mouseClicked()
     if (mouseX > 390 && mouseX < 490 && mouseY > 440 && mouseY < 490)
     {
       storyLoc = 1;
-      storyCatch = new Catcher(0);
+      storyCatch = new Catcher(250);
       startTime = millis();
       totalTimeLeft = millis() + timeLeft;
       while (gameRain.length >= 1)
       {
-        gameRain = (Raindrop[]) shorten(gameRain);
+        gameRain = (Raindrop[]) shorten(gameRain);//gives the array a length of 1 again
       }
       lives = 0;
       player.close();
-      player = minim.loadFile("play.mp3");
-      player.play();
-      saveStory =   catchUp.bought + "," + catchSpeed.bought + "," + catchHandle.bought + "," + lightDown.bought + "," + buyShip.bought+ "," + catchMagnet.bought+ "," + powerUp.bought+ "," + lifeUp.bought+ "," + catchHarvest.bought+ "," + portalGun.bought+ "," + lowerScreen.bought+ "," + moreUp.bought+ "," + rainSlow.bought+ "," + catchCustom.bought+ "," + noLoss.bought;
-      String[] save = split(saveStory, ",");
-      saveStrings("story.txt", save);
+      player = minim.loadFile("play" + int(random(1, 3)) + ".mp3");
+      player.loop();
+    }
+    if (mouseX > 430 && mouseX < 480 && mouseY > 10 && mouseY < 35)//resets story mode to the beginning
+    {
+      catchUp.bought = 0;
+      catchSpeed.bought = 0;
+      catchHandle.bought = 0;
+      lightDown.bought = 0;
+      buyShip.bought = 0;
+      catchMagnet.bought = 0;
+      powerUp.bought = 0;
+      lifeUp.bought = 0;
+      catchHarvest.bought = 0;
+      portalGun.bought = 0;
+      lowerScreen.bought = 0;
+      moreUp.bought = 0;
+      rainSlow.bought = 0;
+      catchCustom.bought = 0;
+      noLoss.bought = 0;
+      storyDay = 1;
+      totalRain = 0;
+      storyLoc = 1;
+      location = 0;
+      ;
     }
     if (mouseX > 10 && mouseX < 60 && mouseY > 10 && mouseY < 35)
     {
@@ -505,7 +523,6 @@ void mouseClicked()
       c = new Catcher(400);
       r = new Raindrop[1];
       r[0] = new Raindrop();
-      time = millis() + Time;
       rainTimer.startTime = millis() + rainTimer.howmuchTime;
     }
     if (mouseX > 50 && mouseX <50+80  && mouseY > 450 && mouseY < 490 && catchCustom.bought >= 1)

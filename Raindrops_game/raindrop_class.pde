@@ -17,7 +17,7 @@ class Raindrop
   Raindrop()
   {
     dropheight = 400;
-    changeV = .1;
+    changeV = .1;//the value of changeV can change in story mode
     initialV = 0;
     loc = new PVector(random(width), d/2);
     vel = new PVector(0, 0);
@@ -28,21 +28,23 @@ class Raindrop
     caught = false;
     setPower = true;
   }
-  void decideIfPower()
+  //powerups don't work
+/*  void decideIfPower()
   {
     if (powerChance() && setPower)
     {
       isPower = true;
     }
     setPower = false;
-  }
+  }*/
   void display()
   {
-    fill(rainColor[rainWhich]);
-    if (isPower)
+    fill(rainColor[rainWhich]);//fills with customized color
+    //powerups don't work
+   /* if (isPower)
     {
       fill(random(255), random(255), random(255));
-    }
+    }*/
     noStroke();
     ellipse(loc.x, loc.y, d, d);
     triangle(loc.x-d/2, loc.y, loc.x+d/2, loc.y, loc.x, loc.y-(vel.y*5));
@@ -57,12 +59,13 @@ class Raindrop
     }
     else
     {
-      acc.set(0, 0);
+      acc.set(0, 0);//if it is either caught or missed, it will move off the screen (i dont know how to use array lists yet)
       vel.set(0, 0);
       loc.y = -100;
     }
   }
-  boolean powerChance()
+  //powerups don't work
+ /* boolean powerChance()
   {
     int wut = int(random(1));
     if (wut == 0)
@@ -71,30 +74,29 @@ class Raindrop
     }
     else
       return false;
-  }
+  }*/
   void checkCatcher(Catcher catcher)
   {
     if (dist(loc.x, loc.y, catcher.loc.x, catcher.loc.y) <= (d/2)+(catcher.d/2))
     {
       caught = true;
       score++;
-      if (location == 3)
+      if (location == 3)//total amount of raindrops will increase if in story mode
       {
         totalRain++;
       }
-      Time-=0;
-      catcher.initialX = catcher.loc.x;
+      catcher.initialX = catcher.loc.x;//changes initial location of the catcher, necessary for equations in automove
       catcher.iCaughtIt= true;
-      if (isPower)
+      //will be implemented when powerups work
+     /* if (isPower)
       {
-
         goPower();
-      }
+      }*/
     }
     if (loc.y >= height)
     {
       int lose = 1;
-      if (location == 3)
+      if (location == 3)//if in story mode, there is a chance to not lose a life
       {
         lose = int(random(0, 11-lossChance));
       }
@@ -105,7 +107,7 @@ class Raindrop
       miss = true;
     }
   }
-  void checkheight()
+  void checkheight()//changes initial position, distance and initial velocity of raindrop. necessary for automove
   {
     initialV = vel.y;
     dropheight = dist(0, loc.y, 0, 400);

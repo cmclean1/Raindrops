@@ -14,13 +14,14 @@ class Upgrade {
     x = _x;
     y = _y;
     max = _max;
-    cost = _cost;
     costUp = _costUp;
     name = _name;
     bought = int(loadStory[currentBought]);
+    cost = (costUp)*(bought+1);
   }
   void display()
   {
+    cost = (costUp)*(bought+1);
     fill(255);
     textAlign(LEFT);
     textSize(10);
@@ -70,7 +71,6 @@ class Upgrade {
       if (totalRain >= cost)
       {
         totalRain-=cost;
-        cost = cost*costUp;
         bought++;
       }
     }
@@ -120,9 +120,9 @@ void upgrade()
   }
   for (int i = 0; i <= rainSlow.bought; i++)
   {
-    for (int i = 0; i <= gameRain.length; i++)
+    for (int j = 0; j <= gameRain.length-1; j++)
     {
-      gameRain.changeV = .1-(i*.01);
+      gameRain[j].changeV = .1-(i*.015);
     }
   }
 }

@@ -13,7 +13,7 @@ class Catcher
   color c;
   Catcher(int _yLoc)
   {
-    c = catcherColor[catcherWhich];    
+    c = catcherColor[catcherWhich];//fills with customized color from story mode. normal color is the first option 
     yLoc = _yLoc;
     loc = new PVector(width/2, yLoc);
     maxAcc = .1;
@@ -28,11 +28,11 @@ class Catcher
     fill(c);
     ellipse(loc.x, loc.y, d, d);
   }
-  void autoMove(Raindrop[] wut)
+  void autoMove(Raindrop[] wut)//automove will make the catcher move to where the raindrop will be when it is the same height as the catcher, the exact time it gets there
   {
-    acc.set(0, 0);
-    nextRain = 0;
-    while (wut[nextRain].caught == true)
+    acc.set(0, 0);//acceleration is unecessary
+    nextRain = 0;//nextRain lets the catcher know which raindrop to look for
+    while (wut[nextRain].caught == true)//nextRain is decided by finding out which raindrops have not been caught
     {
       nextRain++;
       if (nextRain >= wut.length)
@@ -40,19 +40,18 @@ class Catcher
         return;
       }
     }
-    if (iCaughtIt == true)
+    if (iCaughtIt == true)//makes each raindrop change their starting point. necessary for when there are more than one raindrops on the screen
     {
       wut[nextRain].checkheight();
     }
-    iCaughtIt = false;
-    vel.set((wut[nextRain].loc.x-initialX)/wut[nextRain].distance, 0);
+    iCaughtIt = false;//iCaughtIt makes the previous if statement happen only once
+    vel.set((wut[nextRain].loc.x-initialX)/wut[nextRain].distance, 0);//the long equation is a kinematic equation that finds out how fast the catcher needs to be in order to reach the raindrop in time
     loc.add(vel);
   }
-  void move()
+  void move()//regular movement
   {
     if (keyPressed && keyCode == LEFT)
     {
-
       acc.set(-maxAcc, 0);
     }
     else if (keyPressed && keyCode == RIGHT)
@@ -63,16 +62,16 @@ class Catcher
     {
       acc.set(0, 0);
     }
-    if (portalGun.bought == 1 && location == 3)
+    if (portalGun.bought == 1 && location == 3)//if portalGun upgrade is bought (story mode only) the catcher can pass through the edge and go on the other side
     {
       portal();
     }
-    else
+    else // if not, it simply hits rthe edge
     {
       wallStop();
     }
     vel.add(acc);
-    if (vel.x > maxSpeed)
+    if (vel.x > maxSpeed)//makes sure the catcher does not exceed a certain speed
     {
       vel.set(maxSpeed, 0);
     }
@@ -82,7 +81,7 @@ class Catcher
     }
     loc.add(vel);
   }
-  boolean checkLightning(Lightning l)
+  boolean checkLightning(Lightning l)//if lightning appears, then the catcher can't move
   {
     if (l.show == true)
     {
@@ -97,7 +96,7 @@ class Catcher
   }
   void wallStop()
   {
-    if (loc.x >= width-(d/2))
+    if (loc.x >= width-(d/2))//the catcher will crash into an edge and slowly come back out (hence the loc.x-- and lox.x++)
     {
       vel.x = 0;
       acc.x = 0;
@@ -110,7 +109,7 @@ class Catcher
       loc.x++;
     }
   }
-  void portal()
+  void portal()//the catcher will appear on the other side if it goes off the edge
   {
     if (loc.x >= width+(d/2))
     {

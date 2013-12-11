@@ -3,22 +3,14 @@ class Button {
   String message;
   int changeLoc;
   int recWidth;
-  boolean mode;
-  Button(int _y, String _message, int _changeLoc)
-  {
-    y = _y;
-    message = _message;
-    changeLoc = _changeLoc;
-    recWidth = 85;
-    mode = true;
-  }
+  boolean mode;//mode will decide whether or not the button will lead to a game or not
   Button(int _y, String _message, int _changeLoc, boolean _mode)
   {
     y = _y;
     message = _message;
     changeLoc = _changeLoc;
     recWidth = 85;
-    mode = false;
+    mode = _mode;
   }
   void display()
   {
@@ -28,7 +20,7 @@ class Button {
     stroke(0, 0, 255);
     rect(width/2, y-5, recWidth, 25);
     fill(0, 0, 255);
-    if (clicked())
+    if (clicked())//borders will highlight in white if mouse is over the button
     {
       fill(255);
     }
@@ -40,11 +32,11 @@ class Button {
     if (clicked())
     {
       location = changeLoc;
-      if (mode)
+      if (mode)//creates settings for a game
       {
         score = 0;
         gameCatch = new Catcher(400);
-        storyCatch = new Catcher(400);
+        storyCatch = new Catcher(250);
         timeLeft = 120000;
         startTime = millis();
         totalTimeLeft = millis() + timeLeft;
@@ -54,8 +46,8 @@ class Button {
         }
         lives = 0;
         player.close();
-        player = minim.loadFile("play.mp3");
-        player.play();
+        player = minim.loadFile("play" + int(random(1,3)) + ".mp3");
+        player.loop();
       }
     }
   }

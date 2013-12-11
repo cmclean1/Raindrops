@@ -1,4 +1,5 @@
-String powerText = " ";
+//powerups do not work at the time
+/*String powerText = " ";
 boolean displayPower;
 int powerTime;
 void goPower()
@@ -15,4 +16,4 @@ void goPower()
   {
     powerText = "Bigger Catcher!";
   }
-}
+}*/

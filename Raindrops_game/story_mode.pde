@@ -1,5 +1,5 @@
-int storyLoc = 2;
-int storyDay = 0;
+int storyLoc = 1;
+int storyDay;
 
 void storyMode()
 {
@@ -77,22 +77,24 @@ void upGrade()
   lightDown.display();
   catchSpeed.display();
   catchHandle.display();
-  catchMagnet.display();
-  catchHarvest.display();
-  buyShip.display();
-  powerUp.display();
   portalGun.display();
   lifeUp.display();
   lowerScreen.display();
-  moreUp.display();
   rainSlow.display();
   catchCustom.display();
   noLoss.display();
+  //these upgrades don't work yet
+  //catchMagnet.display();
+  //catchHarvest.display();
+  // buyShip.display();
+  //powerUp.display();
+  //moreUp.display();
   fill(0);
   stroke(0, 0, 255);
   rect(390, 440, 100, 50);
   rect(10, 10, 50, 25);
-  if (catchCustom.bought >= 1)
+  rect(430, 10, 50, 25);
+  if (catchCustom.bought >= 1)//display customization button if the upgrade was bought
   {
     rect(50, 450, 80, 40);
   }
@@ -101,6 +103,7 @@ void upGrade()
   textSize(10);
   text("NEXT DAY", 440, 465);
   text("MENU", 25, 25);
+  text("RESET", 450, 25);
   if (catchCustom.bought >= 1)
   {
     text("CUSTIMIZATION", 90, 475);
