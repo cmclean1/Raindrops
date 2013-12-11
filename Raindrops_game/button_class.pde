@@ -32,7 +32,7 @@ class Button {
     if (clicked())
     {
       location = changeLoc;
-      if (mode)//creates settings for a game
+      if (mode)//creates starting settings for a game
       {
         score = 0;
         gameCatch = new Catcher(400);

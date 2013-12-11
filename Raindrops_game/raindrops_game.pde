@@ -25,14 +25,14 @@ Catcher c, gameCatch, storyCatch;
 Lightning menulight, gameLight, storyLight;
 //timer for falling rain
 Timer rainTimer;
-Upgrade catchUp, lightDown, catchSpeed, catchHandle, buyShip, catchMagnet, powerUp, lifeUp, catchHarvest, portalGun, lowerScreen, moreUp, rainSlow, catchCustom, noLoss;
+Upgrade catchUp, lightDown, catchSpeed, catchHandle, buyShip, catchMagnet, powerUp, lifeUp, catchHarvest, portalGun, lowerScreen, moreUp, rainUp, catchCustom, noLoss;
 int score;
 int lives;
 int maxLives = 10;
 int storyLives = 10;
 int introTime;
 int whichIntro = 0;
-int location = 0;
+int location = -2;
 int timeLeft;
 int startTime;
 int totalTimeLeft;
@@ -46,19 +46,19 @@ String[] introString = {
 };
 //arrays and variables for catcher/raindrop color customization
 color[]   catcherColor = {
-  color(255), color(0, 0, 255), color(0, 255, 0), color(255, 0, 0), color(20), color(255, 5),
+  color(255), color(0, 0, 255), color(0, 255, 0), color(255, 0, 0), color(20), color(255, 5), color(245,185,234)
 };
 ;
 color[] rainColor = {
-  color(0, 0, 255), color(255), color(0, 255, 0), color(255, 0, 0), color(20), color(0, 0, 255, 50),
+  color(0, 0, 255), color(255), color(0, 255, 0), color(255, 0, 0), color(20), color(0, 0, 255, 50), color(100,73,18)
 };
 String[] catcherName = {
-  "White", "Blue", "Green", "Red", "Dark", "Ghost"
+  "White", "Blue", "Green", "Red", "Dark", "Ghost", "Fabulous"
 };
 int catcherWhich = 0;
 int rainWhich = 0;
 String[] rainName= {
-  "Normal", "Pure", "Slime", "Blood", "Dark", "Transparent"
+  "Normal", "Pure", "Slime", "Blood", "Dark", "Transparent", "Dirty"
 };
 void setup()
 {
@@ -68,6 +68,7 @@ void setup()
   //numbers from text file can be accessed like this:
   totalRain = int(loadStory[15]);
   storyDay = int(loadStory[16]);
+  
   r = new Raindrop[1];
   c = new Catcher(400);
   r[0] = new Raindrop();
@@ -89,7 +90,7 @@ void setup()
   lowerScreen = new Upgrade(0, 225, 10, 10, 2, "Lower Position", 10); 
   catchCustom = new Upgrade(0, 300, 1, 10, 2, "Customize Catcher", 13);
 
-  rainSlow = new Upgrade(150, 5, 5, 10, 2, "Slower Rain", 12); 
+  rainUp = new Upgrade(150, 5, 5, 10, 2, "Bigger Drops", 12); 
   lightDown = new Upgrade(150, 75, 5, 10, 2, "Less Lighting", 3); 
   catchMagnet = new Upgrade(150, 150, 5, 10, 2, "Attractive Catcher", 5); 
   catchHarvest = new Upgrade(150, 225, 5, 10, 2, "Raindrop Refine", 8); 
@@ -185,7 +186,6 @@ void draw()
     {
       r = (Raindrop[]) append(r, new Raindrop());
     }
-    //c.move();
     c.display();
     c.autoMove(r);
   }
@@ -208,7 +208,7 @@ void draw()
     textSize(15);
     fill(0, 0, 255);
     textAlign(CORNER);
-    text("Coding: Clayton McLean \nMusic: Clayton Mclean \nSound Effects: The Internet \nArt: Clayton McLean \nDesign: Clayton McLean \nProduced By: Clayton McLean \nSpecial Thanks to: Creators of Processing \nAnything and Everything else: Clayton McLean", 15, 25);
+    text("Coding: Clayton McLean \nMusic: Clayton Mclean \nSound Effects: The Internet \nArt: Clayton McLean \nDesign: Clayton McLean \nProduced By: Clayton McLean \nSpecial Thanks to: Creators of Processing and Jesus and Jah \nAnything and Everything else: Clayton McLean", 15, 25);
   }
   if (location == 1)
   {
@@ -290,17 +290,16 @@ void timeMode()//game over will happen when 120 seconds are up
   {
     for (int i = 0; i < gameRain.length; i++)
     {
-      gameRain[i].changeV = .1;//changeV would be decreased because of story mode if I didn't put this
       gameRain[i].display();
       gameRain[i].move();
       gameRain[i].checkCatcher(gameCatch);
     }
-    if (rainTimer.go())
+    if (rainTimer.go())//add another raindrop to the array every 2 seconds
     {
       gameRain = (Raindrop[]) append(gameRain, new Raindrop());
     }
     gameCatch.display();
-    if (gameCatch.checkLightning(gameLight) == false)
+    if (gameCatch.checkLightning(gameLight) == false)//catcher will only move 
     {
       gameCatch.move();
     }    
@@ -325,12 +324,11 @@ void surviveMode()//ten lives, game over will happen if all lives are lost
   {
     for (int i = 0; i < gameRain.length; i++)
     {
-      gameRain[i].changeV = .1;
       gameRain[i].display();
       gameRain[i].move();
       gameRain[i].checkCatcher(gameCatch);
     }
-    if (rainTimer.go())
+    if (rainTimer.go())//add another raindrop to the array every 2 seconds
     {
       gameRain = (Raindrop[]) append(gameRain, new Raindrop());
     }
@@ -362,7 +360,7 @@ void keyPressed()
           //story mode is automatically saved onto story.txt every time a day ends
           storyLoc = 2;
           storyDay++;
-          saveStory =   catchUp.bought + "," + catchSpeed.bought + "," + catchHandle.bought + "," + lightDown.bought + "," + buyShip.bought+ "," + catchMagnet.bought+ "," + powerUp.bought+ "," + lifeUp.bought+ "," + catchHarvest.bought+ "," + portalGun.bought+ "," + lowerScreen.bought+ "," + moreUp.bought+ "," + rainSlow.bought+ "," + catchCustom.bought+ "," + noLoss.bought + "," + totalRain + "," + storyDay ;
+          saveStory =   catchUp.bought + "," + catchSpeed.bought + "," + catchHandle.bought + "," + lightDown.bought + "," + buyShip.bought+ "," + catchMagnet.bought+ "," + powerUp.bought+ "," + lifeUp.bought+ "," + catchHarvest.bought+ "," + portalGun.bought+ "," + lowerScreen.bought+ "," + moreUp.bought+ "," + rainUp.bought+ "," + catchCustom.bought+ "," + noLoss.bought + "," + totalRain + "," + storyDay ;
           String[] save = split(saveStory, ",");
           saveStrings("story.txt", save);
         }
@@ -391,12 +389,13 @@ void keyPressed()
         lives = storyLives;
       }
     }
-    if (key == 'a' || key == 'A') //letters A, D, J and L cycle through catcher and raindrop customization colors
+    //letters A, D, J and L cycle through catcher and raindrop customization colors
+    if (key == 'a' || key == 'A')
     {
       if (storyLoc == 3)
       {
         catcherWhich--;
-        if (catcherWhich <= 0)
+        if (catcherWhich < 0)
         {
           catcherWhich = catcherColor.length-1;
         }
@@ -418,7 +417,7 @@ void keyPressed()
       if (storyLoc == 3)
       {
         rainWhich--;
-        if (rainWhich <= 0)
+        if (rainWhich < 0)
         {
           rainWhich = rainColor.length-1;
         }
@@ -475,7 +474,7 @@ void mouseClicked()
   lifeUp.buy();
   noLoss.buy();
   catchCustom.buy();
-  rainSlow.buy();
+  rainUp.buy();
   if (storyLoc == 2)
   {
     if (mouseX > 390 && mouseX < 490 && mouseY > 440 && mouseY < 490)
@@ -507,7 +506,7 @@ void mouseClicked()
       portalGun.bought = 0;
       lowerScreen.bought = 0;
       moreUp.bought = 0;
-      rainSlow.bought = 0;
+      rainUp.bought = 0;
       catchCustom.bought = 0;
       noLoss.bought = 0;
       storyDay = 1;

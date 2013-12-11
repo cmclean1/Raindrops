@@ -1,5 +1,5 @@
 Upgrade wut;
-int totalRain = 100;
+int;
 
 class Upgrade {
   int x;
@@ -38,22 +38,22 @@ class Upgrade {
     text(name, x+30, y+45);
     if (ifClicked())
     {
-      if (totalRain < cost || bought == max)
+      if (totalRain < cost || bought == max)//highlights red if all upgrades are bought or if you don't have enough raindrops
       {
         fill(255, 0, 0);
       }
-      else if (totalRain >= cost && bought < max)
+      else if (totalRain >= cost && bought < max)//highlights orange if conditions are met
       {
         fill(#FF7C00);
       }
     }
     ellipse(45+x, 65+y, 30, 30);
-    for (int i = 60; i < 60+(max*10); i+=10)
+    for (int i = 60; i < 60+(max*10); i+=10)//makes rectangles to represent maximum number of total upgrades (white)
     {
       fill(255);
       rect(i+x, 50+y, 5, 30);
     }
-    for (int i = 60; i < 60+(bought*10); i+=10)
+    for (int i = 60; i < 60+(bought*10); i+=10)//fills recangles to represent number of bought upgrades (orange)
     {
       fill(#FF7C00);
       rect(i+x, 50+y, 5, 30);
@@ -62,7 +62,6 @@ class Upgrade {
     noStroke();
     ellipse(45+x, 70+y, 10, 10);
     triangle(40+x, 70+y, 50+x, 70+y, 45+x, 55+y);
-    fill(0, 0, 255, 100);
   }
   void buy()
   {
@@ -75,7 +74,7 @@ class Upgrade {
       }
     }
   }
-  boolean ifClicked()
+  boolean ifClicked()//a boolean function that finds out if the mouse is touching the circle
   {
     if (dist(mouseX, mouseY, 45+x, 65+y) < 15 && storyLoc == 2)
     {
@@ -88,41 +87,41 @@ class Upgrade {
   }
 }
 
-void upgrade()
+void upgrade()//increases certain values by a certain increment. only in story mode
 {
-  for (int i = 0; i < catchUp.bought; i+=1)
+  for (int i = 0; i < catchUp.bought; i+=1)//for ever catchUp upgrade bought, catcher diameter will increase by 5
   {
     storyCatch.d = 20+(i*5);
   }
-  for (int i = 0; i < catchSpeed.bought; i+=1)
+  for (int i = 0; i < catchSpeed.bought; i+=1)//for every catchSpeed upgrade bought, maximum catcher speed will incrase by 0.2
   {
     storyCatch.maxSpeed = 5+(i*.2);
   }
-  for (int i = 0; i < catchHandle.bought; i+=1)
+  for (int i = 0; i < catchHandle.bought; i+=1)//catcher acceleration will increase by 0.025
   {
     storyCatch.maxAcc = .01+(i*.025);
   }
-  for (int i = 0; i < lowerScreen.bought; i+=1)
+  for (int i = 0; i < lowerScreen.bought; i+=1)//the catchers y position will increase by 25
   {
     storyCatch.loc.y = 250+(i*25);
   }
-  for (int i = 0; i < lightDown.bought; i+=1)
+  for (int i = 0; i < lightDown.bought; i+=1)//lightning chance to appear will decrease by 1000 
   {
     storyLight.random = 5000+(i*1000);
   }
-  for (int i = 0; i <= lifeUp.bought; i++)
+  for (int i = 0; i <= lifeUp.bought; i++)//amount of lives will increase by 3
   {
     storyLives = 10+(i*3);
   }
-  for (int i = 0; i <= noLoss.bought; i++)
+  for (int i = 0; i <= noLoss.bought; i++)//chance to keep life will increase by 1
   {
     lossChance = 0+i;
   }
-  for (int i = 0; i <= rainSlow.bought; i++)
+  for (int i = 0; i <= rainUp.bought; i++)//raindrop size will increase by 1
   {
     for (int j = 0; j <= gameRain.length-1; j++)
     {
-      gameRain[j].changeV = .1-(i*.015);
+      gameRain[j].d = 10+(i);
     }
   }
 }

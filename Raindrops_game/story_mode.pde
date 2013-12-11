@@ -23,7 +23,7 @@ void storyMode()
     customize();
   }
 }
-void storyPlay()
+void storyPlay()//day will end if lives are lost
 {
   upgrade();
   textAlign(LEFT);
@@ -32,7 +32,6 @@ void storyPlay()
   text("Lives: " + (storyLives-lives), 50, 50);
   textSize(10);
   fill(255, 0, 0);
-  // text("Press \"P\"  to pause", 10, 20);
   textAlign(RIGHT);
   text("Press \"R\"  to end early", 495, 20);
   if (location == 3)
@@ -68,7 +67,7 @@ void storyOver()
     textSize(50);
     text("DAY OVER", width/2, height/2);
     textSize(20);
-    text("Press ENTER go to upgrade menu", width/2, height/2+50);// \nPress H to view high scores", width/2, height/2+50);
+    text("Press ENTER go to upgrade menu", width/2, height/2+50);
   }
 }
 void upGrade()
@@ -80,7 +79,7 @@ void upGrade()
   portalGun.display();
   lifeUp.display();
   lowerScreen.display();
-  rainSlow.display();
+  rainUp.display();
   catchCustom.display();
   noLoss.display();
   //these upgrades don't work yet
