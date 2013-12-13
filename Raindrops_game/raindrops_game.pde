@@ -27,6 +27,7 @@ Lightning menulight, gameLight, storyLight;
 Timer rainTimer;
 Upgrade catchUp, lightDown, catchSpeed, catchHandle, buyShip, catchMagnet, powerUp, lifeUp, catchHarvest, portalGun, lowerScreen, moreUp, rainUp, catchCustom, noLoss;
 int score;
+PFont  font;
 int lives;
 int maxLives = 10;
 int storyLives = 10;
@@ -35,22 +36,22 @@ int whichIntro = 0;
 int location = -2;
 int timeLeft;
 int startTime;
+int totalRain;
 int totalTimeLeft;
 String[] loadStory;
 String saveStory;
 boolean paused = false;
 boolean gameOver = false;
-PFont  font = createFont("Gabriola-48.vlw", 10);
 String[] introString = {
   "You are the fate of the world", "You don't remember much", "but only one word rings through your head:"
 };
 //arrays and variables for catcher/raindrop color customization
 color[]   catcherColor = {
-  color(255), color(0, 0, 255), color(0, 255, 0), color(255, 0, 0), color(20), color(255, 5), color(245,185,234)
+  color(255), color(0, 0, 255), color(0, 255, 0), color(255, 0, 0), color(20), color(255, 5), color(245, 185, 234)
 };
 ;
 color[] rainColor = {
-  color(0, 0, 255), color(255), color(0, 255, 0), color(255, 0, 0), color(20), color(0, 0, 255, 50), color(100,73,18)
+  color(0, 0, 255), color(255), color(0, 255, 0), color(255, 0, 0), color(20), color(0, 0, 255, 50), color(100, 73, 18)
 };
 String[] catcherName = {
   "White", "Blue", "Green", "Red", "Dark", "Ghost", "Fabulous"
@@ -62,13 +63,15 @@ String[] rainName= {
 };
 void setup()
 {
+  font = loadFont("Gabriola-48.vlw");
+ // textFont(font);
   size(500, 500);
   //load numbers from text file
   loadStory = loadStrings("story.txt");
   //numbers from text file can be accessed like this:
   totalRain = int(loadStory[15]);
   storyDay = int(loadStory[16]);
-  
+
   r = new Raindrop[1];
   c = new Catcher(400);
   r[0] = new Raindrop();
@@ -132,7 +135,6 @@ void Logo()
 //plays intro then goes to menu screen
 void intro()
 {
-  textFont(font);
   if (whichIntro <=2)
   {
     textSize(20);
@@ -243,6 +245,17 @@ void draw()
   if (location == 3)
   {
     storyMode();
+  }
+  textAlign(CENTER);
+  textSize(20);
+  println(displayRefine);
+  if (displayRefine && millis() < refineTime+2000)
+  {
+    text(powerText, width/2, height/2);
+  }
+  else
+  {
+    displayRefine = false;
   }
   //the following will be used for powerups when they actually work
   /*
@@ -471,6 +484,7 @@ void mouseClicked()
   lightDown.buy();
   catchSpeed.buy();
   catchHandle.buy();
+  catchHarvest.buy();
   lifeUp.buy();
   noLoss.buy();
   catchCustom.buy();
@@ -513,6 +527,10 @@ void mouseClicked()
       totalRain = 0;
       storyLoc = 1;
       location = 0;
+      c = new Catcher(400);
+      r = new Raindrop[1];
+      r[0] = new Raindrop();
+      rainTimer.startTime = millis() + rainTimer.howmuchTime;
       ;
     }
     if (mouseX > 10 && mouseX < 60 && mouseY > 10 && mouseY < 35)

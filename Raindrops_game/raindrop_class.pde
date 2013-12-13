@@ -14,6 +14,8 @@ class Raindrop
   float finalV;
   boolean setPower;
   boolean isPower;
+  boolean setRefine = true;
+  boolean isRefine;
   Raindrop()
   {
     dropheight = 400;
@@ -29,22 +31,29 @@ class Raindrop
     setPower = true;
   }
   //powerups don't work
-/*  void decideIfPower()
+  /*  void decideIfPower()
+   {
+   if (powerChance() && setPower)
+   {
+   isPower = true;
+   }
+   setPower = false;
+   }*/
+  void decideIfRefined()
   {
-    if (powerChance() && setPower)
+    if (refineChance() && setRefine)
     {
-      isPower = true;
+      isRefine = true;
     }
-    setPower = false;
-  }*/
+    setRefine = false;
+  }
   void display()
   {
     fill(rainColor[rainWhich]);//fills with customized color
-    //powerups don't work
-   /* if (isPower)
+    if (isPower || isRefine)
     {
       fill(random(255), random(255), random(255));
-    }*/
+    }
     noStroke();
     ellipse(loc.x, loc.y, d, d);
     triangle(loc.x-d/2, loc.y, loc.x+d/2, loc.y, loc.x, loc.y-(vel.y*5));
@@ -64,17 +73,27 @@ class Raindrop
       loc.y = -100;
     }
   }
-  //powerups don't work
- /* boolean powerChance()
+  boolean refineChance()
   {
-    int wut = int(random(1));
+    int wut = int(random(10-catchHarvest.bought));
     if (wut == 0)
     {
       return true;
     }
     else
       return false;
-  }*/
+  }
+  //powerups don't work
+  /* boolean powerChance()
+   {
+   int wut = int(random(1));
+   if (wut == 0)
+   {
+   return true;
+   }
+   else
+   return false;
+   }*/
   void checkCatcher(Catcher catcher)
   {
     if (dist(loc.x, loc.y, catcher.loc.x, catcher.loc.y) <= (d/2)+(catcher.d/2))
@@ -88,10 +107,14 @@ class Raindrop
       catcher.initialX = catcher.loc.x;//changes initial location of the catcher, necessary for equations in automove
       catcher.iCaughtIt= true;
       //will be implemented when powerups work
-     /* if (isPower)
+      /* if (isPower)
+       {
+       goPower();
+       }*/
+      if (isRefine)
       {
-        goPower();
-      }*/
+        goRefine();
+      }
     }
     if (loc.y >= height)
     {

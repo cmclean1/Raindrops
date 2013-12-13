@@ -38,6 +38,7 @@ void storyPlay()//day will end if lives are lost
   {
     for (int i = 0; i < gameRain.length; i++)
     {
+      gameRain[i].decideIfRefined();
       gameRain[i].display();
       gameRain[i].move();
       gameRain[i].checkCatcher(storyCatch);
@@ -84,8 +85,8 @@ void upGrade()
   noLoss.display();
   //these upgrades don't work yet
   //catchMagnet.display();
-  //catchHarvest.display();
-  // buyShip.display();
+  catchHarvest.display();
+  //buyShip.display();
   //powerUp.display();
   //moreUp.display();
   fill(0);
