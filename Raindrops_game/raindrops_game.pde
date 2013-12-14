@@ -26,22 +26,22 @@ Lightning menulight, gameLight, storyLight;
 //timer for falling rain
 Timer rainTimer;
 Upgrade catchUp, lightDown, catchSpeed, catchHandle, buyShip, catchMagnet, powerUp, lifeUp, catchHarvest, portalGun, lowerScreen, moreUp, rainUp, catchCustom, noLoss;
+//                                                                  ^         ^                                                     ^
 int score;
 PFont  font;
 int lives;
-int maxLives = 10;
-int storyLives = 10;
-int introTime;
-int whichIntro = 0;
-int location = -2;
-int timeLeft;
-int startTime;
-int totalRain;
-int totalTimeLeft;
-String[] loadStory;
-String saveStory;
-boolean paused = false;
-boolean gameOver = false;
+int maxLives = 10;//max lives in time/survival mode
+int storyLives = 10;//max lives in story mode (can change)
+int introTime;//changes the text that shows during the intro
+int whichIntro = 0;//decides which text ti show
+int location = 0;//decides which screen to be on
+int timeLeft;//used for time attack mode
+int totalRain;//total raindrops collected in story mode
+int totalTimeLeft;//used for time attack mode
+String[] loadStory;//an array of text created from the txt file made from String saveStory
+String saveStory;//a string of text that will be turned into an array saved into a txt file
+boolean paused = false;//decide if game is paused or not
+boolean gameOver = false;//decide if gameover conditions are met
 String[] introString = {
   "You are the fate of the world", "You don't remember much", "but only one word rings through your head:"
 };
@@ -56,7 +56,7 @@ color[] rainColor = {
 String[] catcherName = {
   "White", "Blue", "Green", "Red", "Dark", "Ghost", "Fabulous"
 };
-int catcherWhich = 0;
+int catcherWhich = 0;//decides which catcher and rain color to pick
 int rainWhich = 0;
 String[] rainName= {
   "Normal", "Pure", "Slime", "Blood", "Dark", "Transparent", "Dirty"
@@ -64,7 +64,7 @@ String[] rainName= {
 void setup()
 {
   font = loadFont("Gabriola-48.vlw");
- // textFont(font);
+  // textFont(font);
   size(500, 500);
   //load numbers from text file
   loadStory = loadStrings("story.txt");
@@ -73,12 +73,12 @@ void setup()
   storyDay = int(loadStory[16]);
 
   r = new Raindrop[1];
-  c = new Catcher(400);
-  r[0] = new Raindrop();
+  c = new Catcher(250);
+  r[0] = new Raindrop(c);
   gameRain = new Raindrop[1];
   gameCatch = new Catcher(400);
   storyCatch = new Catcher(250);
-  gameRain[0] = new Raindrop();
+  gameRain[0] = new Raindrop(gameCatch);
   menulight = new Lightning(500);
   gameLight = new Lightning(5000);
   storyLight = new Lightning(5000);
@@ -115,7 +115,7 @@ void setup()
   lightPlayer = lightminim.loadFile("blast.wav");
   gunPlayer = gunminim.loadFile("gun.mp3");
 }
-//shows logo for 5 seconds then goes to intro
+//shows logo for 5 seconds anc plays gunshot effect then goes to intro
 void Logo()
 {
   if (millis() < 5000)
@@ -128,7 +128,7 @@ void Logo()
   {
     location = -1;    
     introTime = millis()+4000;
-    rain.setGain(-15);
+    rain.setGain(-15);//starts rain effect
     rain.loop();
   }
 }
@@ -156,7 +156,7 @@ void intro()
   if (whichIntro >3)
   {
     location = 0;    
-    player.setGain(0);
+    player.setGain(0);//play music
     player.loop();
   }
 }
@@ -176,53 +176,53 @@ void draw()
   {
     intro();
   }
-  if (location == 4 || location == 0)
+  if (location == 4 || location == 0)//location 4 is credits, location 0 is main menu
   {
-    for (int i = 0; i < r.length; i++)
+    c.display();//display catcher
+    c.autoMove(r);//automatically move catcher (explained in class)
+    for (int i = 0; i < r.length; i++)//display raindrops
     {
       r[i].display();
       r[i].move();
-      r[i].checkCatcher(c);
+      r[i].checkCatcher();
     }
-    if (rainTimer.go())
+    if (rainTimer.go())//add new raindrop to the array every two seconds
     {
-      r = (Raindrop[]) append(r, new Raindrop());
+      r = (Raindrop[]) append(r, new Raindrop(c));
     }
-    c.display();
-    c.autoMove(r);
   }
-  fill(255);
-  if (location == 0)
+  if (location == 0)//main menu
   {
     textSize(40);
     fill(0, 0, 255);
     textAlign(CENTER);
-    text("WATER", width/2, height/2);
-    storyMode.display();
+    text("WATER", width/2, height/2);//title
+    storyMode.display();//display buttons for gamemodes and credits
     timeAttack.display();
     survival.display();
     credits.display();
-    menulight.appear();
+    menulight.appear();//display lightning
   }
   if (location == 4)
   {
-    back.display();
+    back.display();//back button from credits
     textSize(15);
     fill(0, 0, 255);
     textAlign(CORNER);
     text("Coding: Clayton McLean \nMusic: Clayton Mclean \nSound Effects: The Internet \nArt: Clayton McLean \nDesign: Clayton McLean \nProduced By: Clayton McLean \nSpecial Thanks to: Creators of Processing and Jesus and Jah \nAnything and Everything else: Clayton McLean", 15, 25);
   }
+  fill(255);//this fill can access each game mode
   if (location == 1)
   {
     textAlign(LEFT);
     textSize(15);
-    text("Score: " + score, 420, 50);
-    if (!gameOver)
+    text("Score: " + score, 420, 50);//display score
+    if (!gameOver)//play game if gameover is false
     {
       gameLight.appear();
       surviveMode();
     }
-    else
+    else//show gameOver if gameover is true
     {
       gameOver();
     }
@@ -231,31 +231,30 @@ void draw()
   {
     textAlign(LEFT);
     textSize(15);
-    text("Score: " + score, 420, 50);
-    if (!gameOver)
+    text("Score: " + score, 420, 50);//display score
+    if (!gameOver)//play game if gameover is false
     {
       gameLight.appear();
       timeMode();
     }
     else
     {
-      gameOver();
+      gameOver();//show gameOver if gameover is true
     }
   }
-  if (location == 3)
+  if (location == 3)//play story mode
   {
     storyMode();
   }
   textAlign(CENTER);
   textSize(20);
-  println(displayRefine);
-  if (displayRefine && millis() < refineTime+2000)
+  if (displayRefine && millis() < refineTime+2000)//display text if you catch a refined raindrop for 2 seconds
   {
-    text(powerText, width/2, height/2);
+    text(powerText, width/2, height/2);//refineText doesn't exist because I only want one to display. even if both are caught in succession
   }
   else
   {
-    displayRefine = false;
+    displayRefine = false;///keeps powerText from displaying all the time
   }
   //the following will be used for powerups when they actually work
   /*
@@ -271,8 +270,7 @@ void draw()
    displayPower = false;
    }*/
 }
-//necessary to stop sound files from playing
-void stop()
+void stop()//necessary to stop sound files from playing
 {
   player.close();
   minim.stop();
@@ -280,7 +278,7 @@ void stop()
 }
 void gameOver()
 {
-  if (gameOver)
+  if (gameOver)//displays if gameover is true
   {
     fill(255, 0, 0);
     textAlign(CENTER);
@@ -294,25 +292,25 @@ void timeMode()//game over will happen when 120 seconds are up
 {
   textAlign(LEFT);
   textSize(15);
-  text("Time: " + int(timeLeft/1000+1), 50, 50);
+  text("Time: " + int(timeLeft/1000+1), 50, 50);//display how much time left in seconds
   textSize(10);
   fill(255, 0, 0);
   textAlign(RIGHT);
   text("Press \"R\"  to end early", 495, 20);
   if (location == 2)
   {
-    for (int i = 0; i < gameRain.length; i++)
+    for (int i = 0; i < gameRain.length; i++)//display drops
     {
       gameRain[i].display();
       gameRain[i].move();
-      gameRain[i].checkCatcher(gameCatch);
+      gameRain[i].checkCatcher();
     }
     if (rainTimer.go())//add another raindrop to the array every 2 seconds
     {
-      gameRain = (Raindrop[]) append(gameRain, new Raindrop());
+      gameRain = (Raindrop[]) append(gameRain, new Raindrop(gameCatch));
     }
     gameCatch.display();
-    if (gameCatch.checkLightning(gameLight) == false)//catcher will only move 
+    if (gameCatch.checkLightning(gameLight) == false)//catcher will only move if lightning is not appearing
     {
       gameCatch.move();
     }    
@@ -339,11 +337,11 @@ void surviveMode()//ten lives, game over will happen if all lives are lost
     {
       gameRain[i].display();
       gameRain[i].move();
-      gameRain[i].checkCatcher(gameCatch);
+      gameRain[i].checkCatcher();
     }
     if (rainTimer.go())//add another raindrop to the array every 2 seconds
     {
-      gameRain = (Raindrop[]) append(gameRain, new Raindrop());
+      gameRain = (Raindrop[]) append(gameRain, new Raindrop(gameCatch));
     }
     gameCatch.display();
     if (gameCatch.checkLightning(gameLight) == false)
@@ -362,13 +360,39 @@ void keyPressed()
   {
     if (keyCode == ENTER)//returns to menu screen or upprade menu if on story mode
     {
+      if (location == 3 && buyShip.bought == 10)
+      {
+        catchUp.bought = 0;
+        catchSpeed.bought = 0;
+        catchHandle.bought = 0;
+        lightDown.bought = 0;
+        buyShip.bought = 0;
+        catchMagnet.bought = 0;
+        powerUp.bought = 0;
+        lifeUp.bought = 0;
+        catchHarvest.bought = 0;
+        portalGun.bought = 0;
+        lowerScreen.bought = 0;
+        moreUp.bought = 0;
+        rainUp.bought = 0;
+        catchCustom.bought = 0;
+        noLoss.bought = 0;
+        storyDay = 1;
+        totalRain = 0;
+        storyLoc = 1;
+        location = 0;
+        c = new Catcher(400);
+        r = new Raindrop[1];
+        r[0] = new Raindrop(c);
+        rainTimer.startTime = millis() + rainTimer.howmuchTime;
+      }
       if (lives >= maxLives || timeLeft <= 0)
       {
         if (location == 1 || location == 2)
         {
           location = 0;
         }
-        if (location == 3)
+        else if (location == 3)
         {
           //story mode is automatically saved onto story.txt every time a day ends
           storyLoc = 2;
@@ -379,7 +403,7 @@ void keyPressed()
         }
         c = new Catcher(400);//resets menu screen and restarts menu music
         r = new Raindrop[1];
-        r[0] = new Raindrop();
+        r[0] = new Raindrop(c);
         player.close();//resets music
         player = minim.loadFile("Water.wav");
         player.play();
@@ -387,7 +411,7 @@ void keyPressed()
         gameOver = false;
       }
     }
-    else if (key == 'r' || key == 'R')//ends a game early by creating the game over requirements
+    else if (key == 'r' || key == 'R')//ends a game early by forcing the game over requirements to become true
     {
       if (location == 1)
       {
@@ -487,6 +511,7 @@ void mouseClicked()
   catchHarvest.buy();
   lifeUp.buy();
   noLoss.buy();
+  buyShip.buy();
   catchCustom.buy();
   rainUp.buy();
   if (storyLoc == 2)
@@ -495,7 +520,6 @@ void mouseClicked()
     {
       storyLoc = 1;
       storyCatch = new Catcher(250);
-      startTime = millis();
       totalTimeLeft = millis() + timeLeft;
       while (gameRain.length >= 1)
       {
@@ -529,27 +553,27 @@ void mouseClicked()
       location = 0;
       c = new Catcher(400);
       r = new Raindrop[1];
-      r[0] = new Raindrop();
+      r[0] = new Raindrop(c);
       rainTimer.startTime = millis() + rainTimer.howmuchTime;
       ;
     }
-    if (mouseX > 10 && mouseX < 60 && mouseY > 10 && mouseY < 35)
+    if (mouseX > 10 && mouseX < 60 && mouseY > 10 && mouseY < 35)//goes back to main menu
     {
       storyLoc = 1;
       location = 0;
       c = new Catcher(400);
       r = new Raindrop[1];
-      r[0] = new Raindrop();
+      r[0] = new Raindrop(c);
       rainTimer.startTime = millis() + rainTimer.howmuchTime;
     }
-    if (mouseX > 50 && mouseX <50+80  && mouseY > 450 && mouseY < 490 && catchCustom.bought >= 1)
+    if (mouseX > 50 && mouseX <50+80  && mouseY > 450 && mouseY < 490 && catchCustom.bought >= 1)//go to custimization screen if customization upgrade is bought
     {
       storyLoc = 3;
     }
   }
   if (storyLoc == 3)
   {
-    if (mouseX > 10 && mouseX < 60 && mouseY > 10 && mouseY < 35)
+    if (mouseX > 10 && mouseX < 60 && mouseY > 10 && mouseY < 35)//goes back to upgrade screen if on customization screen
     {
       storyLoc = 2;
     }

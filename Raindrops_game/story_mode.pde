@@ -33,6 +33,7 @@ void storyPlay()//day will end if lives are lost
   textSize(10);
   fill(255, 0, 0);
   textAlign(RIGHT);
+
   text("Press \"R\"  to end early", 495, 20);
   if (location == 3)
   {
@@ -41,11 +42,11 @@ void storyPlay()//day will end if lives are lost
       gameRain[i].decideIfRefined();
       gameRain[i].display();
       gameRain[i].move();
-      gameRain[i].checkCatcher(storyCatch);
+      gameRain[i].checkCatcher();
     }
     if (rainTimer.go())
     {
-      gameRain = (Raindrop[]) append(gameRain, new Raindrop());
+      gameRain = (Raindrop[]) append(gameRain, new Raindrop(storyCatch));
     }
     storyCatch.display();
     if (gameCatch.checkLightning(gameLight) == false)
@@ -86,7 +87,7 @@ void upGrade()
   //these upgrades don't work yet
   //catchMagnet.display();
   catchHarvest.display();
-  //buyShip.display();
+  buyShip.display();
   //powerUp.display();
   //moreUp.display();
   fill(0);
@@ -110,6 +111,10 @@ void upGrade()
   }
   textSize(15);
   text("DAY " + storyDay, 50, 440);
+  if (buyShip.bought == 10)
+  {
+    winStory();
+  }
 }
 void customize()
 {
@@ -133,5 +138,15 @@ void customize()
   text("> D", width/3+50, height/2+10);
   text("J <", width-(width/3)-50, height/2+10);
   text("> L", width-(width/3)+50, height/2+10);
+}
+void winStory()
+{
+  background(0);
+  fill(255);
+  textAlign(CENTER);
+  textSize(20);
+  text("You Win! It took you " + storyDay + " days to win!", width/2, height/2);
+  textSize(15);
+  text("Press enter to go back to main menu", width/2, height/2+20);
 }
 

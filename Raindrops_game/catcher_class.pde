@@ -43,9 +43,13 @@ class Catcher
     if (iCaughtIt == true)//makes each raindrop change their starting point. necessary for when there are more than one raindrops on the screen
     {
       wut[nextRain].checkheight();
+      wut[nextRain].dropheight = loc.y;
     }
     iCaughtIt = false;//iCaughtIt makes the previous if statement happen only once
-    vel.set((wut[nextRain].loc.x-initialX)/wut[nextRain].distance, 0);//the long equation is a kinematic equation that finds out how fast the catcher needs to be in order to reach the raindrop in time
+    /*the long equation is a kinematic equation that finds out how fast the catcher needs to be in order to reach the raindrop in time
+    it is basically the raindrop distance between the raindrop and the catcher divided by the distance the raindrop takes to reach the y location of the catcher
+    */
+    vel.set((wut[nextRain].loc.x-initialX)/wut[nextRain].distance, 0);
     loc.add(vel);
   }
   void move()//regular movement

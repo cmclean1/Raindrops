@@ -16,10 +16,12 @@ class Raindrop
   boolean isPower;
   boolean setRefine = true;
   boolean isRefine;
-  Raindrop()
+  Catcher catcher;
+  Raindrop(Catcher _catcher)
   {
-    dropheight = 400;
-    changeV = .1;//the value of changeV can change in story mode
+    changeV = .1;
+    catcher = _catcher;
+    dropheight = catcher.loc.y;
     initialV = 0;
     loc = new PVector(random(width), d/2);
     vel = new PVector(0, 0);
@@ -41,6 +43,7 @@ class Raindrop
    }*/
   void decideIfRefined()
   {
+
     if (refineChance() && setRefine)
     {
       isRefine = true;
@@ -94,16 +97,17 @@ class Raindrop
    else
    return false;
    }*/
-  void checkCatcher(Catcher catcher)
+  void checkCatcher()
   {
     if (dist(loc.x, loc.y, catcher.loc.x, catcher.loc.y) <= (d/2)+(catcher.d/2))
     {
       caught = true;
       score++;
-      if (location == 3)//total amount of raindrops will increase if in story mode
+      if (location == 3)//total amount of raindrops collected will increase if in story mode
       {
         totalRain++;
       }
+      dropheight = catcher.loc.y;
       catcher.initialX = catcher.loc.x;//changes initial location of the catcher, necessary for equations in automove
       catcher.iCaughtIt= true;
       //will be implemented when powerups work
@@ -133,7 +137,7 @@ class Raindrop
   void checkheight()//changes initial position, distance and initial velocity of raindrop. necessary for automove
   {
     initialV = vel.y;
-    dropheight = dist(0, loc.y, 0, 400);
+    dropheight = dist(0, loc.y, 0, c.loc.y);
     distance = (finalV-initialV)/acc.y;
   }
 }

@@ -20,7 +20,7 @@ class Button {
     stroke(0, 0, 255);
     rect(width/2, y-5, recWidth, 25);
     fill(0, 0, 255);
-    if (clicked())//borders will highlight in white if mouse is over the button
+    if (clicked())//text will highlight in white if mouse is over the button
     {
       fill(255);
     }
@@ -38,7 +38,6 @@ class Button {
         gameCatch = new Catcher(400);
         storyCatch = new Catcher(250);
         timeLeft = 120000;
-        startTime = millis();
         totalTimeLeft = millis() + timeLeft;
         while (gameRain.length >= 1)
         {
