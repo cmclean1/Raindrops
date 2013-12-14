@@ -44,8 +44,8 @@ class Button {
           gameRain = (Raindrop[]) shorten(gameRain);
         }
         lives = 0;
-        player.close();
-        player = minim.loadFile("play" + int(random(1,4)) + ".mp3");
+        minim.stop();
+        player = minim.loadFile("play" + int(random(1, 4)) + ".mp3");
         player.loop();
       }
     }

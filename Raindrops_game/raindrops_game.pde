@@ -25,7 +25,7 @@ Catcher c, gameCatch, storyCatch;
 Lightning menulight, gameLight, storyLight;
 //timer for falling rain
 Timer rainTimer;
-Upgrade catchUp, lightDown, catchSpeed, catchHandle, buyShip, catchMagnet, powerUp, lifeUp, catchHarvest, portalGun, lowerScreen, moreUp, rainUp, catchCustom, noLoss;
+Upgrade catchUp, lightDown, catchSpeed, catchHandle, buyShip, rainRefine, powerUp, lifeUp, catchHarvest, portalGun, lowerScreen, moreUp, rainUp, catchCustom, noLoss;
 //                                                                  ^         ^                                                     ^
 int score;
 PFont  font;
@@ -95,8 +95,8 @@ void setup()
 
   rainUp = new Upgrade(150, 5, 5, 10, 2, "Bigger Drops", 12); 
   lightDown = new Upgrade(150, 75, 5, 10, 2, "Less Lighting", 3); 
-  catchMagnet = new Upgrade(150, 150, 5, 10, 2, "Attractive Catcher", 5); 
-  catchHarvest = new Upgrade(150, 225, 5, 10, 2, "Raindrop Refine", 8); 
+  rainRefine = new Upgrade(150, 150, 1, 10, 15, "Refine Raindrops", 5); 
+  catchHarvest = new Upgrade(150, 225, 5, 10, 2, "Raindrop Refine Chance", 8); 
   lifeUp = new Upgrade(150, 300, 5, 10, 2, "More Lives", 8); 
 
   powerUp = new Upgrade(300, 5, 1, 10, 2, "Power Ups", 6);
@@ -250,6 +250,7 @@ void draw()
   textSize(20);
   if (displayRefine && millis() < refineTime+2000)//display text if you catch a refined raindrop for 2 seconds
   {
+    fill(255);
     text(powerText, width/2, height/2);//refineText doesn't exist because I only want one to display. even if both are caught in succession
   }
   else
@@ -358,7 +359,7 @@ void keyPressed()
 {
   if (location == 1 || location == 2 || location == 3)
   {
-    if (keyCode == ENTER)//returns to menu screen or upprade menu if on story mode
+    if (keyCode == ENTER)//returns to menu screen, or upprade menu if on story mode
     {
       if (location == 3 && buyShip.bought == 10)
       {
@@ -367,7 +368,7 @@ void keyPressed()
         catchHandle.bought = 0;
         lightDown.bought = 0;
         buyShip.bought = 0;
-        catchMagnet.bought = 0;
+        rainRefine.bought = 0;
         powerUp.bought = 0;
         lifeUp.bought = 0;
         catchHarvest.bought = 0;
@@ -391,22 +392,25 @@ void keyPressed()
         if (location == 1 || location == 2)
         {
           location = 0;
+          minim.stop();//resets music
+          player = minim.loadFile("Water.wav");
+          player.loop();
         }
-        else if (location == 3)
+        else if (location == 3 && storyLoc == 1)
         {
           //story mode is automatically saved onto story.txt every time a day ends
           storyLoc = 2;
           storyDay++;
-          saveStory =   catchUp.bought + "," + catchSpeed.bought + "," + catchHandle.bought + "," + lightDown.bought + "," + buyShip.bought+ "," + catchMagnet.bought+ "," + powerUp.bought+ "," + lifeUp.bought+ "," + catchHarvest.bought+ "," + portalGun.bought+ "," + lowerScreen.bought+ "," + moreUp.bought+ "," + rainUp.bought+ "," + catchCustom.bought+ "," + noLoss.bought + "," + totalRain + "," + storyDay ;
+          saveStory =   catchUp.bought + "," + catchSpeed.bought + "," + catchHandle.bought + "," + lightDown.bought + "," + buyShip.bought+ "," + rainRefine.bought+ "," + powerUp.bought+ "," + lifeUp.bought+ "," + catchHarvest.bought+ "," + portalGun.bought+ "," + lowerScreen.bought+ "," + moreUp.bought+ "," + rainUp.bought+ "," + catchCustom.bought+ "," + noLoss.bought + "," + totalRain + "," + storyDay ;
           String[] save = split(saveStory, ",");
           saveStrings("story.txt", save);
+          minim.stop();//resets music
+          player = minim.loadFile("Water.wav");
+          player.loop();
         }
         c = new Catcher(400);//resets menu screen and restarts menu music
         r = new Raindrop[1];
         r[0] = new Raindrop(c);
-        player.close();//resets music
-        player = minim.loadFile("Water.wav");
-        player.play();
         rainTimer.startTime = millis() + rainTimer.howmuchTime;
         gameOver = false;
       }
@@ -494,16 +498,21 @@ void keyPressed()
 }
 void mouseClicked()
 {
-  if (location == 0 || location == 4)
+  totalRain = 100;
+  if (location == 0)//keeps buttons from activating on the credits screen
   {
     storyMode.ifClicked();
     credits.ifClicked();
-    back.ifClicked();
     survival.ifClicked();
     timeAttack.ifClicked();
   }
+  if (location == 4)
+  {
+    back.ifClicked();
+  }
   catchUp.buy();
   lowerScreen.buy();
+  rainRefine.buy();
   portalGun.buy();
   lightDown.buy();
   catchSpeed.buy();
@@ -537,7 +546,7 @@ void mouseClicked()
       catchHandle.bought = 0;
       lightDown.bought = 0;
       buyShip.bought = 0;
-      catchMagnet.bought = 0;
+      rainRefine.bought = 0;
       powerUp.bought = 0;
       lifeUp.bought = 0;
       catchHarvest.bought = 0;

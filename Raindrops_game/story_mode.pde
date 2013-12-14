@@ -85,7 +85,7 @@ void upGrade()
   catchCustom.display();
   noLoss.display();
   //these upgrades don't work yet
-  //catchMagnet.display();
+  rainRefine.display();
   catchHarvest.display();
   buyShip.display();
   //powerUp.display();

@@ -17,13 +17,13 @@ class Raindrop
   boolean setRefine = true;
   boolean isRefine;
   Catcher catcher;
-  Raindrop(Catcher _catcher)
+  Raindrop(Catcher _catcher)//putting the catcher paremeter in the constructor is easier
   {
     changeV = .1;
     catcher = _catcher;
     dropheight = catcher.loc.y;
     initialV = 0;
-    loc = new PVector(random(width), d/2);
+    loc = new PVector(random(d/2,width-d/2), d/2);
     vel = new PVector(0, 0);
     acc = new PVector(0, changeV);
     distance = sqrt(2*dropheight/acc.y);
@@ -78,8 +78,12 @@ class Raindrop
   }
   boolean refineChance()
   {
-    int wut = int(random(10-catchHarvest.bought));
-    if (wut == 0)
+    int chance = 1;//keeps this function from ever being true if rainRefine hasnt been bought yet
+    if (rainRefine.bought > 0)
+    {
+      chance = int(random(10-catchHarvest.bought));
+    }
+    if (chance == 0)
     {
       return true;
     }
