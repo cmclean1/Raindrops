@@ -17,13 +17,13 @@ class Raindrop
   boolean setRefine = true;
   boolean isRefine;
   Catcher catcher;
-  Raindrop(Catcher _catcher)//putting the catcher paremeter in the constructor is easier
+  Raindrop(Catcher _catcher)//putting the catcher paremeter in the constructor is more effective
   {
     changeV = .1;
     catcher = _catcher;
     dropheight = catcher.loc.y;
     initialV = 0;
-    loc = new PVector(random(d/2,width-d/2), d/2);
+    loc = new PVector(random(d/2, width-d/2), d/2);
     vel = new PVector(0, 0);
     acc = new PVector(0, changeV);
     distance = sqrt(2*dropheight/acc.y);
@@ -32,23 +32,21 @@ class Raindrop
     caught = false;
     setPower = true;
   }
-  //powerups don't work
-  /*  void decideIfPower()
-   {
-   if (powerChance() && setPower)
-   {
-   isPower = true;
-   }
-   setPower = false;
-   }*/
-  void decideIfRefined()
+  void decideIfPower()
   {
-
+    if (powerChance() && setPower)
+    {
+      isPower = true;
+    }
+    setPower = false;
+  }
+  void decideIfRefined()//in one frame, it will decide whether to become a refined raindrop or not
+  {
     if (refineChance() && setRefine)
     {
       isRefine = true;
     }
-    setRefine = false;
+    setRefine = false;//keeps the above if statement from happening multiple times
   }
   void display()
   {
@@ -63,7 +61,7 @@ class Raindrop
   }
   void move()
   {
-    if (!caught && !miss)
+    if (!caught && !miss)//if it is either caught or missed, it will move off the screen (i dont know how to use array lists yet)
     {
       acc.set(0, changeV);
       vel.add(acc);
@@ -71,7 +69,7 @@ class Raindrop
     }
     else
     {
-      acc.set(0, 0);//if it is either caught or missed, it will move off the screen (i dont know how to use array lists yet)
+      acc.set(0, 0);
       vel.set(0, 0);
       loc.y = -100;
     }
@@ -90,17 +88,20 @@ class Raindrop
     else
       return false;
   }
-  //powerups don't work
-  /* boolean powerChance()
-   {
-   int wut = int(random(1));
-   if (wut == 0)
-   {
-   return true;
-   }
-   else
-   return false;
-   }*/
+  boolean powerChance()
+  {
+    int chance = 1;//keeps this from ever being true if powerUp hasnt been bought yer
+    if (powerUp.bought > 0)
+    {
+      chance = int(random(11-moreUp.bought));
+    }
+    if (chance == 0)
+    {
+      return true;
+    }
+    else
+      return false;
+  }
   void checkCatcher()
   {
     if (dist(loc.x, loc.y, catcher.loc.x, catcher.loc.y) <= (d/2)+(catcher.d/2))
@@ -114,22 +115,25 @@ class Raindrop
       dropheight = catcher.loc.y;
       catcher.initialX = catcher.loc.x;//changes initial location of the catcher, necessary for equations in automove
       catcher.iCaughtIt= true;
-      //will be implemented when powerups work
-      /* if (isPower)
-       {
-       goPower();
-       }*/
       if (isRefine)
       {
-        goRefine();
+        goRefine();//activates refinery if catched
+      }
+      if (isPower)
+      {
+        goPower();//activates powerup if catched
       }
     }
     if (loc.y >= height)
     {
       int lose = 1;
-      if (location == 3)//if in story mode, there is a chance to not lose a life
+      if (location == 3 && noLoss.bought > 0)//if in story mode, there is a chance to not lose a life
       {
         lose = int(random(0, 11-lossChance));
+      }
+      if (goPower && whichPower == 2)//keeps lives from being lost if invinsible powerup is activated
+      {
+        lose = 0;
       }
       if (lose != 0)
       {
@@ -138,7 +142,7 @@ class Raindrop
       miss = true;
     }
   }
-  void checkheight()//changes initial position, distance and initial velocity of raindrop. necessary for automove
+  void checkheight()//changes initial position, distance and initial velocity of raindrop. necessary for catcher automove
   {
     initialV = vel.y;
     dropheight = dist(0, loc.y, 0, c.loc.y);

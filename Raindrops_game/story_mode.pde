@@ -26,6 +26,7 @@ void storyMode()
 void storyPlay()//day will end if lives are lost
 {
   upgrade();
+  powerUps();
   textAlign(LEFT);
   textSize(15);
   text("Total: " + totalRain, 420, 50);
@@ -40,6 +41,7 @@ void storyPlay()//day will end if lives are lost
     for (int i = 0; i < gameRain.length; i++)
     {
       gameRain[i].decideIfRefined();
+      gameRain[i].decideIfPower();
       gameRain[i].display();
       gameRain[i].move();
       gameRain[i].checkCatcher();
@@ -49,9 +51,16 @@ void storyPlay()//day will end if lives are lost
       gameRain = (Raindrop[]) append(gameRain, new Raindrop(storyCatch));
     }
     storyCatch.display();
-    if (gameCatch.checkLightning(gameLight) == false)
+    if (goPower && whichPower == 3)
     {
-      storyCatch.move();
+      storyCatch.autoMove(gameRain);
+    }
+    else
+    {
+      if (gameCatch.checkLightning(gameLight) == false)
+      {
+        storyCatch.move();
+      }
     }
     if (lives >= storyLives)
     {
@@ -64,6 +73,9 @@ void storyOver()
 {
   if (gameOver)
   {
+    goPower = false;
+    displayPower =false;
+    displayRefine = false;
     fill(255, 0, 0);
     textAlign(CENTER);
     textSize(50);
@@ -84,12 +96,11 @@ void upGrade()
   rainUp.display();
   catchCustom.display();
   noLoss.display();
-  //these upgrades don't work yet
   rainRefine.display();
   catchHarvest.display();
   buyShip.display();
-  //powerUp.display();
-  //moreUp.display();
+  powerUp.display();
+  moreUp.display();
   fill(0);
   stroke(0, 0, 255);
   rect(390, 440, 100, 50);

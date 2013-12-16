@@ -87,23 +87,24 @@ void setup()
   survival = new Button(width/2+90, "Survival", 1, true);
   credits = new Button(width/2+120, "Credits", 4, false);
   back = new Button(width/2, "Back", 0, false);
-  catchUp = new Upgrade(0, 0, 5, 10, 2, "Bigger Catcher", 0); 
-  catchSpeed = new Upgrade(0, 75, 10, 10, 2, "Max Speed", 1); 
-  catchHandle = new Upgrade(0, 150, 10, 10, 2, "Acceleation", 2); 
-  lowerScreen = new Upgrade(0, 225, 10, 10, 2, "Lower Position", 10); 
-  catchCustom = new Upgrade(0, 300, 1, 10, 2, "Customize Catcher", 13);
+  
+  catchUp = new Upgrade(0, 0, 5, 12, "Bigger Catcher", 0); 
+  catchSpeed = new Upgrade(0, 75, 10, 8, "Max Speed", 1); 
+  catchHandle = new Upgrade(0, 150, 10, 8, "Acceleation", 2); 
+  lowerScreen = new Upgrade(0, 225, 10, 8, "Lower Position", 10); 
+  catchCustom = new Upgrade(0, 300, 1, 30, "Customize Catcher", 13);
 
-  rainUp = new Upgrade(150, 5, 5, 10, 2, "Bigger Drops", 12); 
-  lightDown = new Upgrade(150, 75, 5, 10, 2, "Less Lighting", 3); 
-  rainRefine = new Upgrade(150, 150, 1, 10, 15, "Refine Raindrops", 5); 
-  catchHarvest = new Upgrade(150, 225, 5, 10, 2, "Raindrop Refine Chance", 8); 
-  lifeUp = new Upgrade(150, 300, 5, 10, 2, "More Lives", 8); 
+  rainUp = new Upgrade(150, 5, 5, 10, "Bigger Drops", 12); 
+  lightDown = new Upgrade(150, 75, 5, 10, "Less Lighting", 3); 
+  rainRefine = new Upgrade(150, 150, 5, 15, "Refine Raindrops", 5); 
+  catchHarvest = new Upgrade(150, 225, 5, 10, "Raindrop Refine Chance", 8); 
+  lifeUp = new Upgrade(150, 300, 5, 2, "More Lives", 8); 
 
-  powerUp = new Upgrade(300, 5, 1, 10, 2, "Power Ups", 6);
-  moreUp = new Upgrade(300, 75, 5, 10, 2, "Power Up Frequency", 11); 
-  noLoss = new Upgrade(300, 150, 7, 10, 2, "Chance to keep Life", 14); 
-  portalGun = new Upgrade(300, 225, 1, 10, 15, "Portals", 9); 
-  buyShip = new Upgrade(300, 300, 10, 10, 2, "Ship Part", 4);
+  powerUp = new Upgrade(300, 5, 1, 30, "Power Ups", 6);
+  moreUp = new Upgrade(300, 75, 5, 10, "Power Up Frequency", 11); 
+  noLoss = new Upgrade(300, 150, 7, 12, "Chance to keep Life", 14); 
+  portalGun = new Upgrade(300, 225, 1, 30, "Portals", 9); 
+  buyShip = new Upgrade(300, 300, 10, 20, "Ship Part", 4);
 
   rainTimer = new Timer(2000);
   minim = new Minim(this);
@@ -257,19 +258,23 @@ void draw()
   {
     displayRefine = false;///keeps powerText from displaying all the time
   }
-  //the following will be used for powerups when they actually work
-  /*
-  textAlign(CENTER);
-   textSize(20);
-   println(displayPower);
-   if (displayPower && millis() < powerTime+2000)
-   {
-   text(powerText, width/2, height/2);
-   }
-   else
-   {
-   displayPower = false;
-   }*/
+  if (displayPower && millis() < powerTime+2000)
+  {
+    text(powerText, width/2, height/2);
+  }
+  else
+  {
+    displayPower = false;
+  }
+  if (goPower)
+  {
+    fill(255);
+    rect(0, 490, ((powerTime+10000-millis())*width)/(10000), 10);
+    if (millis() >  powerTime+10000)
+    {
+      goPower = false;
+    }
+  }
 }
 void stop()//necessary to stop sound files from playing
 {
@@ -498,7 +503,6 @@ void keyPressed()
 }
 void mouseClicked()
 {
-  totalRain = 100;
   if (location == 0)//keeps buttons from activating on the credits screen
   {
     storyMode.ifClicked();
@@ -512,8 +516,10 @@ void mouseClicked()
   }
   catchUp.buy();
   lowerScreen.buy();
+  moreUp.buy();
   rainRefine.buy();
   portalGun.buy();
+  powerUp.buy();
   lightDown.buy();
   catchSpeed.buy();
   catchHandle.buy();

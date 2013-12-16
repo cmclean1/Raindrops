@@ -20,29 +20,32 @@ class Lightning
   }
   void appear()
   {
-    if (chance())
+    if (!goPower && whichPower != 1)
     {
-      show = true;
-    }
-    if (millis() <= showTime && show == true)
-    {
-      int wut = int(random(5));//creates a flashing effect
-      if (wut == 0)
+      if (chance())
       {
-        background(255);
+        show = true;
       }
-      lightPlayer.setGain(-15);//plays the lightning sound effect
-      lightPlayer.play();
-    }
-    else
-    {
-      show = false;
-      showTime+=1000;
-    }
-    if (lightPlayer.isPlaying() == false)//rewinds the lightning sound effect so it can play again later once it stops playing
-    {
-      lightPlayer.pause();
-      lightPlayer.rewind();
+      if (millis() <= showTime && show == true)
+      {
+        int wut = int(random(5));//creates a flashing effect
+        if (wut == 0)
+        {
+          background(255);
+        }
+        lightPlayer.setGain(-15);//plays the lightning sound effect
+        lightPlayer.play();
+      }
+      else
+      {
+        show = false;
+        showTime+=1000;
+      }
+      if (lightPlayer.isPlaying() == false)//rewinds the lightning sound effect so it can play again later once it stops playing
+      {
+        lightPlayer.pause();
+        lightPlayer.rewind();
+      }
     }
   }
 }

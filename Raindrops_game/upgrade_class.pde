@@ -8,7 +8,7 @@ class Upgrade {
   int max;
   int bought;
   String name;
-  Upgrade(int _x, int _y, int _max, float _cost, float _costUp, String _name, int currentBought)
+  Upgrade(int _x, int _y, int _max, float _costUp, String _name, int currentBought)
   {
     x = _x;
     y = _y;
@@ -16,7 +16,6 @@ class Upgrade {
     costUp = _costUp;
     name = _name;
     bought = int(loadStory[currentBought]);
-    cost = (costUp)*(bought+1);
   }
   void display()
   {
@@ -88,40 +87,24 @@ class Upgrade {
 
 void upgrade()//increases certain values by a certain increment. only in story mode
 {
-  for (int i = 0; i < catchUp.bought; i+=1)//for ever catchUp upgrade bought, catcher diameter will increase by 5
+  //for ever catchUp upgrade bought, catcher diameter will increase by 5
+  storyCatch.d = 20+(catchUp.bought*5);
+  //for every catchSpeed upgrade bought, maximum catcher speed will incrase by 0.2
+  storyCatch.maxSpeed = 5+(catchSpeed.bought*.2);
+  //catcher acceleration will increase by 0.025
+  storyCatch.maxAcc = .1+(catchHandle.bought*.025);
+  //the catchers y position will increase by 25
+  storyCatch.loc.y = 250+(lowerScreen.bought*20);
+  //lightning chance to appear will decrease by 1000 
+  storyLight.random = 5000+(lightDown.bought*1000);
+  //amount of lives will increase by 3
+  storyLives = 10+(lifeUp.bought*3);
+  //chance to keep life will increase by 1
+  lossChance = 0+noLoss.bought;
+  //raindrop size will increase by 1
+  for (int j = 0; j <= gameRain.length-1; j++)
   {
-    storyCatch.d = 20+(i*5);
-  }
-  for (int i = 0; i < catchSpeed.bought; i+=1)//for every catchSpeed upgrade bought, maximum catcher speed will incrase by 0.2
-  {
-    storyCatch.maxSpeed = 5+(i*.2);
-  }
-  for (int i = 0; i < catchHandle.bought; i+=1)//catcher acceleration will increase by 0.025
-  {
-    storyCatch.maxAcc = .01+(i*.025);
-  }
-  for (int i = 0; i < lowerScreen.bought; i+=1)//the catchers y position will increase by 25
-  {
-    storyCatch.loc.y = 250+(i*25);
-  }
-  for (int i = 0; i < lightDown.bought; i+=1)//lightning chance to appear will decrease by 1000 
-  {
-    storyLight.random = 5000+(i*1000);
-  }
-  for (int i = 0; i <= lifeUp.bought; i++)//amount of lives will increase by 3
-  {
-    storyLives = 10+(i*3);
-  }
-  for (int i = 0; i <= noLoss.bought; i++)//chance to keep life will increase by 1
-  {
-    lossChance = 0+i;
-  }
-  for (int i = 0; i <= rainUp.bought; i++)//raindrop size will increase by 1
-  {
-    for (int j = 0; j <= gameRain.length-1; j++)
-    {
-      gameRain[j].d = 10+(i);
-    }
+    gameRain[j].d = 10+(rainUp.bought);
   }
 }
 

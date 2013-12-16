@@ -32,7 +32,8 @@ class Catcher
   {
     acc.set(0, 0);//acceleration is unecessary
     nextRain = 0;//nextRain lets the catcher know which raindrop to look for
-    while (wut[nextRain].caught == true)//nextRain is decided by finding out which raindrops have not been caught
+
+    while (wut[nextRain].caught == true || wut[nextRain].miss == true)//nextRain is decided by finding out which raindrop has not been caught or missed
     {
       nextRain++;
       if (nextRain >= wut.length)
@@ -47,8 +48,8 @@ class Catcher
     }
     iCaughtIt = false;//iCaughtIt makes the previous if statement happen only once
     /*the long equation is a kinematic equation that finds out how fast the catcher needs to be in order to reach the raindrop in time
-    it is basically the raindrop distance between the raindrop and the catcher divided by the distance the raindrop takes to reach the y location of the catcher
-    */
+     it is basically the raindrop distance between the raindrop and the catcher divided by the distance the raindrop takes to reach the y location of the catcher
+     */
     vel.set((wut[nextRain].loc.x-initialX)/wut[nextRain].distance, 0);
     loc.add(vel);
   }
