@@ -1,7 +1,7 @@
 int changeCar;
 int whichScore = 1;
 boolean goKey = true;
-boolean newScore = true;
+boolean newScore;
 char[] a = new char[3];
 void highscores()
 {
@@ -47,8 +47,8 @@ String inputScore()
     goKey = true;
   }
   yes = new String(a);
-  timeScores[whichScore] = yes;
-  timeScores[whichScore-1] = timeScores[whichScore-1].valueOf(score);
+  timeScores[whichScore-1] = yes;
+  timeScores[whichScore] = timeScores[whichScore-1].valueOf(score);
   return yes;
 }
 

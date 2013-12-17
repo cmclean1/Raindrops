@@ -308,6 +308,10 @@ void gameOver()
       {
         textSize(15);
         text(timeScores[i] + ".................." + timeScores[i+1], width/2, 70+(i*10));
+        if(int(timeScores[i+1]) <= score)
+        {
+          newScore = true;
+        }
       }
     }
     highscores();
