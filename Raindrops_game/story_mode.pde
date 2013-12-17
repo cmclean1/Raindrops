@@ -122,6 +122,9 @@ void upGrade()
   }
   textSize(15);
   text("DAY " + storyDay, 50, 440);
+  fill(255);
+  textAlign(CENTER);
+  text("Total Raindrops: " + totalRain, width/2, 30);
   if (buyShip.bought == 10)
   {
     winStory();

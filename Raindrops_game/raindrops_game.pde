@@ -45,16 +45,16 @@ boolean gameOver = false;//decide if gameover conditions are met
 String[] introString = {
   "You are the fate of the world", "You don't remember much", "but only one word rings through your head:"
 };
-//arrays and variables for catcher/raindrop color customization
+//arrays and variables for catcher/raindrop color customization. each Color array # corresponds to its Name array #
 color[]   catcherColor = {
-  color(255), color(0, 0, 255), color(0, 255, 0), color(255, 0, 0), color(20), color(255, 5), color(245, 185, 234)
+  color(255), color(0, 0, 255), color(0, 255, 0), color(255, 0, 0), color(20), color(255, 5), color(245, 185, 234), color(255,255,0), color(255,0,255)
 };
 ;
 color[] rainColor = {
   color(0, 0, 255), color(255), color(0, 255, 0), color(255, 0, 0), color(20), color(0, 0, 255, 50), color(100, 73, 18)
 };
 String[] catcherName = {
-  "White", "Blue", "Green", "Red", "Dark", "Ghost", "Fabulous"
+  "White", "Blue", "Green", "Red", "Dark", "Ghost", "Fabulous", "Yellow", "Purple"
 };
 int catcherWhich = 0;//decides which catcher and rain color to pick
 int rainWhich = 0;
@@ -96,9 +96,9 @@ void setup()
 
   rainUp = new Upgrade(150, 5, 5, 10, "Bigger Drops", 12); 
   lightDown = new Upgrade(150, 75, 5, 10, "Less Lighting", 3); 
-  rainRefine = new Upgrade(150, 150, 5, 15, "Refine Raindrops", 5); 
+  rainRefine = new Upgrade(150, 150, 1, 15, "Refine Raindrops", 5); 
   catchHarvest = new Upgrade(150, 225, 5, 10, "Raindrop Refine Chance", 8); 
-  lifeUp = new Upgrade(150, 300, 5, 2, "More Lives", 8); 
+  lifeUp = new Upgrade(150, 300, 5, 10, "More Lives", 8); 
 
   powerUp = new Upgrade(300, 5, 1, 30, "Power Ups", 6);
   moreUp = new Upgrade(300, 75, 5, 10, "Power Up Frequency", 11); 
@@ -210,7 +210,7 @@ void draw()
     textSize(15);
     fill(0, 0, 255);
     textAlign(CORNER);
-    text("Coding: Clayton McLean \nMusic: Clayton Mclean \nSound Effects: The Internet \nArt: Clayton McLean \nDesign: Clayton McLean \nProduced By: Clayton McLean \nSpecial Thanks to: Creators of Processing and Jesus and Jah \nAnything and Everything else: Clayton McLean", 15, 25);
+    text("Coding: Clayton McLean \nMusic: Clayton Mclean, Beyonce, Lil Mama \nSound Effects: The Internet \nArt: Clayton McLean \nDesign: Clayton McLean \nProduced By: Clayton McLean \nSpecial Thanks to: Creators of Processing and Jesus and Jah \nAnything and Everything else: Clayton McLean", 15, 25);
   }
   fill(255);//this fill can access each game mode
   if (location == 1)
@@ -542,7 +542,7 @@ void mouseClicked()
       }
       lives = 0;
       player.close();
-      player = minim.loadFile("play" + int(random(1, 4)) + ".mp3");
+      player = minim.loadFile("play" + int(random(1, 5)) + ".mp3");
       player.loop();
     }
     if (mouseX > 430 && mouseX < 480 && mouseY > 10 && mouseY < 35)//resets story mode to the beginning
