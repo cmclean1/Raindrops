@@ -39,6 +39,10 @@ int timeLeft;//used for time attack mode
 int totalRain;//total raindrops collected in story mode
 int totalTimeLeft;//used for time attack mode
 String[] loadStory;//an array of text created from the txt file made from String saveStory
+String[] allScores;
+String[] storyScores;
+String[] timeScores;
+String[] survivalScores;
 String saveStory;//a string of text that will be turned into an array saved into a txt file
 boolean paused = false;//decide if game is paused or not
 boolean gameOver = false;//decide if gameover conditions are met
@@ -47,7 +51,7 @@ String[] introString = {
 };
 //arrays and variables for catcher/raindrop color customization. each Color array # corresponds to its Name array #
 color[]   catcherColor = {
-  color(255), color(0, 0, 255), color(0, 255, 0), color(255, 0, 0), color(20), color(255, 5), color(245, 185, 234), color(255,255,0), color(255,0,255)
+  color(255), color(0, 0, 255), color(0, 255, 0), color(255, 0, 0), color(20), color(255, 5), color(245, 185, 234), color(255, 255, 0), color(255, 0, 255)
 };
 ;
 color[] rainColor = {
@@ -71,7 +75,12 @@ void setup()
   //numbers from text file can be accessed like this:
   totalRain = int(loadStory[15]);
   storyDay = int(loadStory[16]);
-
+  allScores = loadStrings("highScores.txt");
+  timeScores = new String[10];
+  for (int i = 0; i < 10; i++)
+  {
+    timeScores[i] = allScores[i];
+  }
   r = new Raindrop[1];
   c = new Catcher(250);
   r[0] = new Raindrop(c);
@@ -87,7 +96,7 @@ void setup()
   survival = new Button(width/2+90, "Survival", 1, true);
   credits = new Button(width/2+120, "Credits", 4, false);
   back = new Button(width/2, "Back", 0, false);
-  
+
   catchUp = new Upgrade(0, 0, 5, 12, "Bigger Catcher", 0); 
   catchSpeed = new Upgrade(0, 75, 10, 8, "Max Speed", 1); 
   catchHandle = new Upgrade(0, 150, 10, 8, "Acceleation", 2); 
@@ -210,7 +219,7 @@ void draw()
     textSize(15);
     fill(0, 0, 255);
     textAlign(CORNER);
-    text("Coding: Clayton McLean \nMusic: Clayton Mclean, Beyonce, Lil Mama \nSound Effects: The Internet \nArt: Clayton McLean \nDesign: Clayton McLean \nProduced By: Clayton McLean \nSpecial Thanks to: Creators of Processing and Jesus and Jah \nAnything and Everything else: Clayton McLean", 15, 25);
+    text("Coding: Clayton McLean \nMusic: Clayton Mclean, Beyonce, Lil Mama, Lady Gaga \nSound Effects: The Internet \nArt: Clayton McLean \nDesign: Clayton McLean \nProduced By: Clayton McLean \nSpecial Thanks to: Creators of Processing and Jesus and Jah \nAnything and Everything else: Clayton McLean", 15, 25);
   }
   fill(255);//this fill can access each game mode
   if (location == 1)
@@ -292,6 +301,16 @@ void gameOver()
     text("GAME OVER", width/2, height/2);
     textSize(20);
     text("Press ENTER to return to menu", width/2, height/2+50);
+    text("High Scores:", width/2, 30);
+    if (location == 2)
+    {
+      for (int i = 0; i < 10; i+=2)
+      {
+        textSize(15);
+        text(timeScores[i] + ".................." + timeScores[i+1], width/2, 70+(i*10));
+      }
+    }
+    highscores();
   }
 }
 void timeMode()//game over will happen when 120 seconds are up
@@ -400,6 +419,8 @@ void keyPressed()
           minim.stop();//resets music
           player = minim.loadFile("Water.wav");
           player.loop();
+          a = new char[3];
+          changeCar = 0;
         }
         else if (location == 3 && storyLoc == 1)
         {
