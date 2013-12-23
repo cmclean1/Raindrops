@@ -30,3 +30,5 @@ Menu Algorithm:
 - give lightning a chance to appear
 - if lighting appears, it will flash and the sound effect will play
 - if a button is pressed, location variable will change
+GLITCH
+A glitch I haven't been able to fix is that sometimes when a button is clicked, the "Null Pointer Exception" error will pop up and the whole program will stop working.
