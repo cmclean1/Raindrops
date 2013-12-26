@@ -63,7 +63,7 @@ void storyPlay()//day will end if lives are lost
     {
       gameOver = true;
     }
-    gameLight.appear();
+    storyLight.appear();
   }
 }
 void storyOver()//gameover screen for story mode
