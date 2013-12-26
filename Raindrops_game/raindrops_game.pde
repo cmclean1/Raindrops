@@ -79,7 +79,7 @@ void setup()
   storyDay = int(loadStory[16]);
 
   r = new Raindrop[1];
-  c = new Catcher(250);
+  c = new Catcher(400);
   r[0] = new Raindrop(c);
   gameRain = new Raindrop[1];
   gameCatch = new Catcher(400);
