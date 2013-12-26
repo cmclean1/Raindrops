@@ -3,7 +3,7 @@ int storyDay;
 
 void storyMode()
 {
-  if (storyLoc == 1)
+  if (storyLoc == 1)//storyLoc changes location in story mode
   {
     if (!gameOver)
     {
@@ -51,13 +51,13 @@ void storyPlay()//day will end if lives are lost
       gameRain = (Raindrop[]) append(gameRain, new Raindrop(storyCatch));
     }
     storyCatch.display();
-    if (goPower && whichPower == 3)
+    if (goPower && whichPower == 3)//storyCatch will automove if the powerup was caught
     {
       storyCatch.autoMove(gameRain);
     }
     else
     {
-      if (gameCatch.checkLightning(gameLight) == false)
+      if (storyCatch.checkLightning(gameLight) == false)storyCatch will not move if lightnng appears
       {
         storyCatch.move();
       }
@@ -69,7 +69,7 @@ void storyPlay()//day will end if lives are lost
     gameLight.appear();
   }
 }
-void storyOver()
+void storyOver()//gameover screen for story mode
 {
   if (gameOver)
   {
@@ -125,7 +125,7 @@ void upGrade()
   fill(255);
   textAlign(CENTER);
   text("Total Raindrops: " + totalRain, width/2, 30);
-  if (buyShip.bought == 10)
+  if (buyShip.bought == 10)//you win the game of all buyShip upgrades are bought
   {
     winStory();
   }
