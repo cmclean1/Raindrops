@@ -1,5 +1,5 @@
-int storyLoc = 1;
-int storyDay;
+int storyLoc = 1;//decides which story menu to be at
+int storyDay;//shows how many runs it takes to finish story mode
 
 void storyMode()
 {
@@ -51,7 +51,7 @@ void storyPlay()//day will end if lives are lost
       gameRain = (Raindrop[]) append(gameRain, new Raindrop(storyCatch));
     }
     storyCatch.display();
-    if (goPower && whichPower == 3)
+    if (goPower && whichPower == 3)//catcher will automove if the automove powerup was caught
     {
       storyCatch.autoMove(gameRain);
     }

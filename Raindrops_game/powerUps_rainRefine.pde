@@ -1,8 +1,8 @@
-
-boolean displayPower;
-int powerTime;
-boolean goPower;
-int whichPower;
+boolean displayPower;//decides powerup text
+int powerTime;//current millis
+boolean goPower;//decide if a powerup is activated or deactivated
+int whichPower;//decides which powerup will activate
+String powerText = " ";//text that will show up after collecting a powerup or refined raindrop. controlled by displayPower or displayRefine
 void goPower()
 {
   displayPower = true;
@@ -13,20 +13,19 @@ void goPower()
   {
     powerText = "Bigger Catcher!";
   }
-  if(whichPower == 1)
+  if (whichPower == 1)
   {
     powerText = "No Lightning!";
   }
-  if(whichPower == 2)
+  if (whichPower == 2)
   {
     powerText = "Invincible!";
   }
-  if(whichPower == 3)
+  if (whichPower == 3)
   {
     powerText = "Auto Move!";
   }
 }
-String powerText = " ";
 boolean displayRefine;
 int refineTime;
 void goRefine()
@@ -36,7 +35,7 @@ void goRefine()
   int random = int(random(3));
   if (random == 0)
   {
-    totalRain+=9;//it adds less than what the text says since it already adds one when you originally catch it
+    totalRain+=9;//it adds one less than what the text says since one is already added when originally caught
     powerText = "+10 Raindrops!";
   }
   if (random == 1)
@@ -54,8 +53,7 @@ void powerUps()
 {
   if (whichPower == 0 && goPower)
   {
-    storyCatch.d = 35+(catchUp.bought*5);
-    gameCatch.d = 35;
+    storyCatch.d = 35+(catchUp.bought*5);//increase catcher diameter by five if whichPower equals 0
   }
 }
 
