@@ -1,4 +1,3 @@
-Upgrade wut;
 
 class Upgrade {
   int x;
