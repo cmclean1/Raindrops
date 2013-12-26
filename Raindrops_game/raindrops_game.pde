@@ -390,7 +390,7 @@ void keyPressed()
         rainUp.bought = 0;
         catchCustom.bought = 0;
         noLoss.bought = 0;
-        storyDay = 1;
+        storyDay = 0;
         totalRain = 0;
         storyLoc = 1;
         location = 0;
@@ -550,7 +550,7 @@ void mouseClicked()
       rainUp.bought = 0;
       catchCustom.bought = 0;
       noLoss.bought = 0;
-      storyDay = 1;
+      storyDay = 0;
       totalRain = 0;
       storyLoc = 1;
       location = 0;
