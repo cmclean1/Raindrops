@@ -26,7 +26,9 @@ Lightning menulight, gameLight, storyLight;
 //timer for falling rain
 Timer rainTimer;
 Upgrade catchUp, lightDown, catchSpeed, catchHandle, buyShip, rainRefine, powerUp, lifeUp, catchHarvest, portalGun, lowerScreen, moreUp, rainUp, catchCustom, noLoss;
-//                                                                  ^         ^                                                     ^
+String powerText = " ";
+boolean displayRefine;
+int refineTime;
 int score;
 int lives;
 int maxLives = 10;//max lives in time/survival mode

@@ -21,9 +21,7 @@ void goPower()
     powerText = "Auto Move!";
   }
 }
-String powerText = " ";
-boolean displayRefine;
-int refineTime;
+
 void goRefine()
 {
   displayRefine = true;
