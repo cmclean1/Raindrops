@@ -1,8 +1,3 @@
-
-boolean displayPower;
-int powerTime;
-boolean goPower;
-int whichPower;
 void goPower()
 {
   displayPower = true;

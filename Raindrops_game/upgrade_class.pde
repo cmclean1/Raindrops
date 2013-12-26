@@ -1,4 +1,3 @@
-
 class Upgrade {
   int x;
   int y;

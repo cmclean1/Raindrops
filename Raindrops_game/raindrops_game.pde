@@ -28,13 +28,12 @@ Timer rainTimer;
 Upgrade catchUp, lightDown, catchSpeed, catchHandle, buyShip, rainRefine, powerUp, lifeUp, catchHarvest, portalGun, lowerScreen, moreUp, rainUp, catchCustom, noLoss;
 //                                                                  ^         ^                                                     ^
 int score;
-PFont  font;
 int lives;
 int maxLives = 10;//max lives in time/survival mode
 int storyLives = 10;//max lives in story mode (can change)
 int introTime;//changes the text that shows during the intro
-int whichIntro = 0;//decides which text ti show
-int location = 0;//decides which screen to be on
+int whichIntro = 0;//decides which text to show
+int location = -2;//decides which screen to be on
 int timeLeft;//used for time attack mode
 int totalRain;//total raindrops collected in story mode
 int totalTimeLeft;//used for time attack mode
@@ -61,10 +60,15 @@ int rainWhich = 0;
 String[] rainName= {
   "Normal", "Pure", "Slime", "Blood", "Dark", "Transparent", "Dirty"
 };
+boolean displayPower;
+int powerTime;
+boolean goPower;
+int whichPower;
+int lossChance;
+int storyLoc = 1;
+int storyDay;
 void setup()
 {
-  font = loadFont("Gabriola-48.vlw");
-  // textFont(font);
   size(500, 500);
   //load numbers from text file
   loadStory = loadStrings("story.txt");
@@ -140,6 +144,7 @@ void intro()
   {
     textSize(20);
     fill(255);
+    textAlign(LEFT);
     text(introString[whichIntro], 10, 50);
   }
   if (millis() >= introTime)
@@ -480,25 +485,6 @@ void keyPressed()
         }
       }
     }
-    //the following is a pause function I am working on
-    /*else if (key == 'p' || key == 'P')
-     {
-     paused = !paused;
-     if (paused)
-     {
-     loop();
-     }
-     else
-     {
-     fill(255, 0, 0);
-     textAlign(CENTER);
-     textSize(50);
-     text("PAUSED", width/2, height/2);
-     textSize(20);
-     text("Press \"P\" to unpause", width/2, height/2+50);
-     noLoop();
-     }
-     }*/
   }
 }
 void mouseClicked()

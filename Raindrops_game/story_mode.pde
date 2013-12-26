@@ -1,6 +1,3 @@
-int storyLoc = 1;
-int storyDay;
-
 void storyMode()
 {
   if (storyLoc == 1)//storyLoc changes location in story mode

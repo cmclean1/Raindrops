@@ -1,4 +1,3 @@
-int lossChance;
 class Raindrop
 {
   PVector loc;
