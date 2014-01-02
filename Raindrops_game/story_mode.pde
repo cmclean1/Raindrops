@@ -54,7 +54,7 @@ void storyPlay()//day will end if lives are lost
     }
     else
     {
-      if (storyCatch.checkLightning(gameLight) == false)//storyCatch will not move if lightnng appears
+      if (storyCatch.checkLightning(storyLight) == false)//storyCatch will not move if lightnng appears
       {
         storyCatch.move();
       }
