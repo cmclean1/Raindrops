@@ -35,7 +35,7 @@ int maxLives = 10;//max lives in time/survival mode
 int storyLives = 10;//max lives in story mode (can change)
 int introTime;//changes the text that shows during the intro
 int whichIntro = 0;//decides which text to show
-int location = -2;//decides which screen to be on
+int location = 0;//decides which screen to be on
 int timeLeft;//used for time attack mode
 int totalRain;//total raindrops collected in story mode
 int totalTimeLeft;//used for time attack mode
