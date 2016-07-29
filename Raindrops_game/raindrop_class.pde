@@ -149,4 +149,3 @@ class Raindrop
     distance = (finalV-initialV)/acc.y;
   }
 }
-

@@ -219,7 +219,7 @@ void draw()
     textSize(15);
     fill(0, 0, 255);
     textAlign(CORNER);
-    text("Coding: Clayton McLean \nMusic: Clayton Mclean, Beyonce, Lil Mama, Lady Gaga \nSound Effects: The Internet \nArt: Clayton McLean \nDesign: Clayton McLean \nProduced By: Clayton McLean \nSpecial Thanks to: Creators of Processing and Jesus and Jah \nAnything and Everything else: Clayton McLean", 15, 25);
+    text("Coding: Clayton McLean \nMusic: Clayton Mclean, Beyonce, Lil Mama \nSound Effects: The Internet \nArt: Clayton McLean \nDesign: Clayton McLean \nProduced By: Clayton McLean \nSpecial Thanks to: Creators of Processing and Jesus and Jah \nAnything and Everything else: Clayton McLean", 15, 25);
   }
   fill(255);//this fill can access each game mode
   if (location == 1)
@@ -301,20 +301,6 @@ void gameOver()
     text("GAME OVER", width/2, height/2);
     textSize(20);
     text("Press ENTER to return to menu", width/2, height/2+50);
-    text("High Scores:", width/2, 30);
-    if (location == 2)
-    {
-      for (int i = 0; i < 10; i+=2)
-      {
-        textSize(15);
-        text(timeScores[i] + ".................." + timeScores[i+1], width/2, 70+(i*10));
-        if(int(timeScores[i+1]) <= score)
-        {
-          newScore = true;
-        }
-      }
-    }
-    highscores();
   }
 }
 void timeMode()//game over will happen when 120 seconds are up
@@ -423,8 +409,6 @@ void keyPressed()
           minim.stop();//resets music
           player = minim.loadFile("Water.wav");
           player.loop();
-          a = new char[3];
-          changeCar = 0;
         }
         else if (location == 3 && storyLoc == 1)
         {
@@ -567,7 +551,7 @@ void mouseClicked()
       }
       lives = 0;
       player.close();
-      player = minim.loadFile("play" + int(random(1, 5)) + ".mp3");
+      player = minim.loadFile("play" + int(random(1, 4)) + ".mp3");
       player.loop();
     }
     if (mouseX > 430 && mouseX < 480 && mouseY > 10 && mouseY < 35)//resets story mode to the beginning
@@ -619,4 +603,3 @@ void mouseClicked()
     }
   }
 }
-

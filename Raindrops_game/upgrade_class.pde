@@ -107,4 +107,3 @@ void upgrade()//increases certain values by a certain increment. only in story m
     gameRain[j].d = 10+(rainUp.bought);
   }
 }
-

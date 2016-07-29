@@ -163,4 +163,3 @@ void winStory()
   textSize(15);
   text("Press enter to go back to main menu", width/2, height/2+20);
 }
-

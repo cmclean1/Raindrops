@@ -56,4 +56,3 @@ void powerUps()
     storyCatch.d = 35+(catchUp.bought*5);//increase catcher diameter by five if whichPower equals 0
   }
 }
-
